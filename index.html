@@ -140,8 +140,26 @@
 
   /* Track Badge Selector */
   .track-selector-wrapper { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 2rem 0; background: var(--color-background-secondary); padding: 12px; border-radius: var(--border-radius-lg); border: 1px solid var(--color-border-secondary);}
-  .track-badge { padding: 10px 16px; background: var(--color-background-primary); border: 1px solid var(--color-border-primary); border-radius: 6px; font-size: 13px; font-weight: 700; color: var(--color-text-secondary); text-align: center; flex: 1; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.02);}
-  .track-badge:hover { border-color: var(--color-brand-primary); color: var(--color-brand-primary); }
+  .track-badge {
+    padding: 10px 16px;
+    background: var(--color-background-primary);
+    border: 1px solid var(--color-border-primary);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    text-align: center;
+    flex: 1;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .track-badge:hover {
+    border-color: var(--color-brand-primary);
+    color: var(--color-brand-primary);
+    background-color: var(--color-border-primary);
+    transform: translateY(-1px);
+  }
   .track-badge.highlight { background: var(--color-brand-primary); color: white; border-color: var(--color-brand-dark); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);}
   .track-content { display: none; animation: fadeIn 0.3s ease-in-out; }
   .track-content.active { display: block; }
@@ -1352,66 +1370,73 @@ Result: Cosine Similarity 0.942 -> "Top Decile Alignment"</div>
   <!-- SECTION 6: SCORING (SLIDERS) -->
   <section id="s7">
     <div class="section-tag">07 · System Math</div>
-    <div class="section-title">Scoring Architecture & Circuit Breaker Simulator</div>
-    
-    <div class="ai-tabs">
+    <div class="section-title">Scoring Architecture & Circuit Breaker</div>
+    <p>To process massive volumes of applicants efficiently, we implement a mathematical Circuit Breaker. If a candidate performs poorly in early stages, and it becomes mathematically impossible to hit the passing threshold, the system ejects them immediately, saving human bandwidth.</p>
+
+    <!-- Interactive Simulator Sandbox -->
+    <div class="sim-wrap">
+      <div class="sim-head" style="background:var(--color-brand-primary)">Circuit Breaker Simulator (S3, S4, S5)</div>
+      <div class="sim-body">
+        <div class="slider-row">
+          <span class="slider-label">Stage 3: Sandbox Challenge (35%)</span>
+          <input type="range" min="0" max="100" value="70" id="sl3" oninput="recalc()">
+          <span class="slider-val" id="sv3">0.70</span>
+        </div>
+        <div class="slider-row">
+          <span class="slider-label">Stage 4: Values Gate (20%)</span>
+          <input type="range" min="0" max="100" value="75" id="sl4" oninput="recalc()">
+          <span class="slider-val" id="sv4">0.75</span>
+        </div>
+        <div class="slider-row">
+          <span class="slider-label">Stage 5: System Defense (45%)</span>
+          <input type="range" min="0" max="100" value="80" id="sl5" oninput="recalc()">
+          <span class="slider-val" id="sv5">0.80</span>
+        </div>
+
+        <div class="stage-scores" id="stageCards"></div>
+
+        <div class="result-bar-wrap">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <span style="font-size:12px;font-weight:600;color:var(--color-text-secondary)">Projected Final Score</span>
+            <span style="font-size:12px;font-weight:600;color:var(--color-text-tertiary)">Threshold: 0.78</span>
+          </div>
+          <div class="result-bar-bg">
+            <div class="result-bar-fill" id="resultFill" style="width:0%">
+              <span class="result-bar-text" id="resultText">0.000</span>
+            </div>
+            <div class="threshold-line" style="left:78%"></div>
+          </div>
+        </div>
+
+        <div class="result-row">
+          <span class="verdict" id="verdictBadge">Calculating...</span>
+          <span class="ceiling-row" id="ceilingText"></span>
+        </div>
+        <div class="cb-notice" id="cbNotice"></div>
+      </div>
+    </div>
+
+    <!-- AI Philosophy Tabs below the Simulator -->
+    <div class="ai-tabs" style="margin-top: 2rem;">
       <div class="ai-tab active" onclick="switchAITab('candidate', this)">A · AI-Assisted vs Restricted</div>
-      <div class="ai-tab" onclick="switchAITab('funnel', this)">B · Pipeline Simulator</div>
+      <div class="ai-tab" onclick="switchAITab('funnel', this)">B · Funnel instrumentation</div>
+      <div class="ai-tab" onclick="switchAITab('failure', this)">C · Failure protocols</div>
     </div>
 
     <div class="ai-panel active" id="ai-candidate">
       <div class="stance"><p><strong>Stance: Two stages only. And for different reasons.</strong></p></div>
-      <p style="font-size: 13px; margin-bottom: 10px;"><strong>Stage 5 — Live ambiguity interview: Restricted.</strong><br>Because what Stage 5 specifically measures is live, real-time human reasoning. The ability to think through an ambiguous problem out loud, navigate uncertainty in a conversation, and communicate a decision under mild pressure — without preparation time. That skill matters in real client work. In those moments AI isn't open on a second screen. The client is looking at you and waiting.</p>
-      
-      <p style="font-size: 13px; margin-bottom: 10px;"><strong>Stage 4 — Values interview: Restricted.</strong><br>Different reason. There's simply nothing for AI to help with. The interviewer is asking about your actual career history, how you handled a specific failure, why you left a company, how you behave under pressure. AI can't generate a genuine answer to "tell me about a time you pushed back on a client and were wrong."</p>
+      <p style="font-size: 13px; margin-bottom: 10px;"><strong>Stage 5 — Live ambiguity interview: Restricted.</strong><br>Because what Stage 5 specifically measures is live, real-time human reasoning. The ability to think through an ambiguous problem out loud, navigate uncertainty in a conversation, and communicate a decision under mild pressure — without preparation time. Stage 5 is measuring exactly that capability — and if AI is allowed, you're no longer measuring it. You're measuring how fast someone can type a prompt while nodding.</p>
+      <p style="font-size: 13px; margin-bottom: 10px;"><strong>Stage 4 — Values interview: Restricted.</strong><br>Different reason. There's simply nothing for AI to help with. The interviewer is asking about your actual career history, how you handled a specific failure, why you left a company, how you behave under pressure. Either you have those experiences or you don't. AI can't generate a genuine answer to "tell me about a time you pushed back on a client and were wrong." It would be obvious instantly.</p>
+      <p style="font-size: 13px; font-weight: 600; color: var(--color-brand-dark);">The underlying principle: Restrict AI only when the stage is specifically measuring a human capability that AI cannot substitute for in real professional contexts. Stage 3 allows AI because there the signal IS how they use AI. Stages 4 and 5 restrict AI because there the signal IS the human without it.</p>
     </div>
-    
-    <div class="ai-panel" id="ai-funnel">
-        <p style="font-size: 13px; margin-bottom: 1rem;">Adjust the candidate's hypothetical stage scores below to see how the mathematical Circuit Breaker evaluates their final <strong>Proxify Excellence Score (PES)</strong>.</p>
-        
-        <div class="sim-wrap">
-          <div class="sim-head">
-            <span>Dynamic Vector Weights</span>
-            <span>Threshold: 0.78</span>
-          </div>
-          <div class="sim-body">
-            <div class="slider-row">
-              <span class="slider-label">S3: Agentic Sandbox Score</span>
-              <input type="range" id="sl3" min="0" max="100" value="85" oninput="recalc()">
-              <span class="slider-val" id="sv3">0.85</span>
-            </div>
-            <div class="slider-row">
-              <span class="slider-label">S4: Values & Alignment Score</span>
-              <input type="range" id="sl4" min="0" max="100" value="90" oninput="recalc()">
-              <span class="slider-val" id="sv4">0.90</span>
-            </div>
-            <div class="slider-row">
-              <span class="slider-label">S5: Live Defense Score</span>
-              <input type="range" id="sl5" min="0" max="100" value="70" oninput="recalc()">
-              <span class="slider-val" id="sv5">0.70</span>
-            </div>
-            
-            <div class="stage-scores" id="stageCards"></div>
-            
-            <div class="result-bar-wrap">
-              <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-                <span style="font-size:12px;font-weight:800;color:var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Projected Model Output (PES)</span>
-              </div>
-              <div class="result-bar-bg">
-                <div class="result-bar-fill" id="resultFill" style="width:0%">
-                  <span class="result-bar-text" id="resultText"></span>
-                </div>
-                <div class="threshold-line" style="left:78%"></div>
-              </div>
-            </div>
 
-            <div class="result-row">
-              <span class="verdict" id="verdictBadge"></span>
-              <span class="ceiling-row" id="ceilingText" style="font-size: 13px; font-weight: 600;"></span>
-            </div>
-            <div class="cb-notice" id="cbNotice"></div>
-          </div>
-        </div>
+    <div class="ai-panel" id="ai-funnel">
+      <p style="font-size: 13px;">Our system utilizes programmatic hooks to automatically detect anomalous submission parameters. We monitor behavioral traits by continuously comparing the time-delta between key-presses inside the Agentic Sandbox against typical human velocity. This informs the Live System Defense evaluator of potential copy-paste anomalies.</p>
+    </div>
+
+    <div class="ai-panel" id="ai-failure">
+      <p style="font-size: 13px;"><strong>Risk of LLM Scorer Hallucination:</strong> An LLM evaluating code may let a broken architecture slide.<br>
+      <em>Mitigation:</em> Every sandbox run automatically triggers an isolated unit-test suite on the backend. No candidate is passed based on code aesthetics alone; raw functional correctness is verified via automated runtime asserts before the AI grades the architectural documentation.</p>
     </div>
   </section>
 
