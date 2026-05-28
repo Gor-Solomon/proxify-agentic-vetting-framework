@@ -193,9 +193,18 @@
 
   .sub-header { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-brand-dark); background: var(--color-brand-light); padding: 6px 10px; border-radius: 4px; border-left: 3px solid var(--color-brand-primary); margin-bottom: 8px; width: max-content;}
   .metric-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
-  .metric-list li { font-size: 13px; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.6; border-bottom: 1px solid var(--color-border-tertiary); padding-bottom: 8px;}
-  .metric-list li:last-child { border-bottom: none; padding-bottom: 0; }
-  .metric-list li::before { content: "■"; color: var(--color-brand-primary); font-size: 9px; margin-top: 5px; }
+  .metric-list li {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    align-items: start;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    border-bottom: 1px solid var(--color-border-tertiary);
+    padding: 10px 0;
+  }
+  .metric-list li:last-child { border-bottom: none; }
   .metric-list strong { color: var(--color-text-primary); }
 
   .code-diff-container { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 0.75rem 0; }
@@ -641,7 +650,7 @@
               </div>
               <h4 style="color: var(--color-text-primary); margin-top: 0; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--color-border-secondary); padding-bottom:8px; margin-bottom:12px;">Predictive Validation</h4>
               <ul class="metric-list">
-                  <li><strong>Job Performance Score (JPS) at 90 days:</strong> P1 = manager rating (wt 0.50). P2 = code review pass rate (wt 0.25). P3 = prod incidents inverted (wt 0.15). <strong>P4 = Core Web Vitals regression rate</strong> (wt 0.10).<br><strong style="color:var(--color-brand-primary)">Frontend JPS = (P1×0.50 + P2×0.25 + (10 − P3×2)×0.15 + (10 − P4×10)×0.10)</strong></li>
+                  <li><strong>Job Performance Score (JPS) at 90 days:</strong> <span>P1 = manager rating (wt 0.50). P2 = code review pass rate (wt 0.25). P3 = prod incidents inverted (wt 0.15). <strong>P4 = Core Web Vitals regression rate</strong> (wt 0.10).<br><strong style="color:var(--color-brand-primary)">Frontend JPS = (P1×0.50 + P2×0.25 + (10 − P3×2)×0.15 + (10 − P4×10)×0.10)</strong></span></li>
                   <li><strong>Predictive validity:</strong> r = Pearson(F_vector, JPS_vector). Target r ≥ 0.55.</li>
                   <li><strong>Quarterly weight refit (n ≥ 50):</strong> New weight = r_i / (r1 + r1B + r2 + r3).</li>
               </ul>
@@ -830,7 +839,7 @@ public async Task&lt;IActionResult&gt; ProcessBatch(...)
               </div>
               <h4 style="color: var(--color-text-primary); margin-top: 0; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--color-border-secondary); padding-bottom:8px; margin-bottom:12px;">Predictive Validation</h4>
               <ul class="metric-list">
-                  <li><strong>Job Performance Score (JPS) at 90 days:</strong> P1 = manager rating (wt 0.50). P2 = code review pass rate (wt 0.35). P3 = prod incidents per month inverted (wt 0.15). <strong>JPS = (P1×0.50 + P2×0.35 + (10 − P3×2)×0.15).</strong></li>
+                  <li><strong>Job Performance Score (JPS) at 90 days:</strong> <span>P1 = manager rating (wt 0.50). P2 = code review pass rate (wt 0.35). P3 = prod incidents per month inverted (wt 0.15). <strong>JPS = (P1×0.50 + P2×0.35 + (10 − P3×2)×0.15).</strong></span></li>
                   <li><strong>Predictive validity:</strong> r = Pearson(F_vector, JPS_vector). Target r ≥ 0.55.</li>
               </ul>
           </div>
@@ -958,7 +967,7 @@ public async Task&lt;IActionResult&gt; ProcessBatch(...)
               <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A; margin-bottom: 8px;">F = (S1 × 0.15) + (S1B × 0.15) + (S2 × 0.40) + (S3 × 0.30)</p>
               <h4 style="color: var(--color-text-primary); margin-top: 1.5rem; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--color-border-secondary); padding-bottom:8px; margin-bottom:12px;">Predictive Validation</h4>
               <ul class="metric-list">
-                  <li><strong>Job Performance Score (JPS) at 90 days:</strong> P1 = manager rating (wt 0.40). <strong>P2 = Cross-layer bug rate</strong> (wt 0.25). P3 = code review pass rate (wt 0.20). P4 = incident involvement inverted (wt 0.15).</li>
+                  <li><strong>Job Performance Score (JPS) at 90 days:</strong> <span>P1 = manager rating (wt 0.40). <strong>P2 = Cross-layer bug rate</strong> (wt 0.25). P3 = code review pass rate (wt 0.20). P4 = incident involvement inverted (wt 0.15).</span></li>
               </ul>
           </div>
         </div>
