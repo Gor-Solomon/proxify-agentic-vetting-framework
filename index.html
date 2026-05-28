@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proxify · A Vetting System for the Agentic Era</title>
+<style>
+  :root {
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #334155;
+    --color-text-tertiary: #64748B;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #F8FAFC;
+    --color-background-info: #EFF6FF;
+    --color-text-info: #3730A3;
+    --color-border-primary: #CBD5E1;
+    --color-border-secondary: #E2E8F0;
+    --color-border-tertiary: #F1F5F9;
+    --color-brand-primary: #2563EB;
+    --color-brand-dark: #1E3A8A;
+    --color-brand-light: #DBEAFE;
+    --color-success: #10B981;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
+    --border-radius-md: 6px;
+    --border-radius-lg: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); background: var(--color-background-primary); color: var(--color-text-primary); line-height: 1.6;}
+  .doc { max-width: 1080px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+  
+  h2 { font-size: 20px; font-weight: 700; color: var(--color-text-primary); margin-bottom: .4rem; letter-spacing: -0.01em;}
+  h3 { font-size: 17px; font-weight: 700; color: var(--color-text-primary); margin: 2rem 0 .75rem; letter-spacing: -0.01em;}
+  p { font-size: 14px; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 1.25rem; }
+  ul { padding-left: 1.25rem; margin: .5rem 0 1.25rem; }
+  li { font-size: 14px; color: var(--color-text-secondary); line-height: 1.8; margin-bottom: 0.5rem;}
+
+  .cover { border-bottom: 3px solid var(--color-border-secondary); padding-bottom: 2.5rem; margin-bottom: 2.5rem; }
+  .cover-label { font-size: 12px; letter-spacing: .15em; text-transform: uppercase; color: var(--color-text-danger); margin-bottom: .75rem; font-weight: 800;}
+  .cover-title { font-size: 36px; font-weight: 800; color: var(--color-text-primary); line-height: 1.1; margin-bottom: .75rem; letter-spacing: -0.03em;}
+  .cover-sub { font-size: 16px; color: var(--color-text-secondary); font-weight: 500;}
+  
+  .toc { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.5rem; margin-bottom: 3rem; border: 1px solid var(--color-border-tertiary);}
+  .toc-title { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--color-text-tertiary); margin-bottom: 1rem; font-weight: 700;}
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; }
+  .toc-item { font-size: 13px; color: var(--color-text-secondary); padding: 5px 0; cursor: pointer; display: flex; gap: 12px; align-items: baseline; transition: color 0.2s; font-weight: 500;}
+  .toc-item:hover { color: var(--color-brand-primary); }
+  .toc-num { color: var(--color-brand-primary); font-size: 11px; min-width: 20px; font-weight: 700; opacity: 0.8;}
+  
+  section { margin-bottom: 4.5rem; }
+  .section-tag { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--color-brand-primary); margin-bottom: .5rem; font-weight: 800;}
+  .section-title { font-size: 26px; font-weight: 800; color: var(--color-text-primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--color-border-tertiary); padding-bottom: 1rem; letter-spacing: -0.02em;}
+  
+  .callout { background: #0F172A; color: #F8FAFC; border-left: 4px solid var(--color-text-danger); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 1.5rem; margin: 1.5rem 0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+  .callout p { color: #CBD5E1; font-size: 14px; margin-bottom: 0;}
+  .callout strong { color: #ffffff; }
+  .stance { background: var(--color-background-warning); border-left: 3px solid var(--color-border-warning); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+  
+  .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 1.5rem 0; }
+  .comp-card { border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 1.25rem; background: var(--color-background-primary); box-shadow: 0 1px 2px rgba(0,0,0,0.02);}
+  .comp-card-title { font-size: 14px; font-weight: 800; color: var(--color-text-primary); margin-bottom: .5rem; }
+  
+  .stage-grid { display: flex; flex-direction: column; gap: 12px; margin: 1.5rem 0; }
+  .stage-card { border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); overflow: hidden; background: var(--color-background-primary); }
+  .stage-header { display: flex; align-items: center; gap: 12px; padding: 1.25rem; background: var(--color-background-secondary); cursor: pointer; transition: background 0.2s;}
+  .stage-header:hover { background: #E2E8F0; }
+  .stage-num { font-size: 12px; font-weight: 800; color: var(--color-text-tertiary); min-width: 24px; }
+  .stage-name { font-size: 14px; font-weight: 700; color: var(--color-text-primary); flex: 1; }
+  .stage-badge { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 700;}
+  .badge-auto { background: var(--color-background-success); color: var(--color-text-success); }
+  .badge-async { background: var(--color-background-info); color: var(--color-text-info); }
+  .badge-live { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .badge-human { background: var(--color-background-danger); color: var(--color-text-danger); }
+  .stage-body { padding: 1.5rem; border-top: 1px solid var(--color-border-secondary); display: none; }
+  .stage-body.open { display: block; }
+  .expand-hint { font-size: 11px; font-weight: 600; color: var(--color-text-tertiary); margin-left: auto; }
+
+  .funnel-vis { display: flex; flex-direction: column; gap: 8px; margin: 2rem 0; }
+  .funnel-row { display: flex; align-items: center; gap: 16px; }
+  .funnel-bar-wrap { flex: 1; }
+  .funnel-bar-inner { height: 36px; border-radius: 6px; display: flex; align-items: center; padding: 0 12px; font-size: 12px; font-weight: 700; color: #ffffff; transition: width .4s ease-in-out;}
+  .funnel-label { font-size: 13px; font-weight: 600; color: var(--color-text-secondary); min-width: 150px; }
+  .funnel-count { font-size: 12px; font-weight: 600; color: var(--color-text-tertiary); min-width: 80px; text-align: right; }
+
+  .funnel-list { display: flex; flex-direction: column; margin-top: 2rem; }
+  .funnel-row-item { display: flex; padding: 2rem 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .funnel-row-item:last-child { border-bottom: none; }
+  .funnel-num { font-size: 48px; font-weight: 300; color: var(--color-text-tertiary); width: 80px; flex-shrink: 0; line-height: 1; text-align: left; }
+  .funnel-text { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .funnel-name { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+  .funnel-desc { font-size: 14px; font-weight: 400; color: var(--color-text-secondary); line-height: 1.7; }
+
+  .formula { font-family: var(--font-mono); font-size: 13px; background: #0F172A; color: #F8FAFC; border-radius: var(--border-radius-md); padding: 1.25rem 1.5rem; margin: 1.25rem 0; line-height: 1.6; overflow-x: auto; white-space: pre-wrap; border: 1px solid #334155;}
+  
+  .sim-wrap { border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); overflow: hidden; margin: 2rem 0; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);}
+  .sim-head { background: var(--color-brand-dark); padding: 1.25rem 1.5rem; font-size: 14px; font-weight: 700; color: white; display: flex; align-items: center; justify-content: space-between; }
+  .sim-body { padding: 1.5rem; background: var(--color-background-primary); }
+  .slider-row { display: flex; align-items: center; gap: 16px; margin: 16px 0; }
+  .slider-label { font-size: 13px; font-weight: 600; color: var(--color-text-secondary); min-width: 200px; }
+  .slider-val { font-size: 13px; font-weight: 700; color: var(--color-text-primary); min-width: 40px; text-align: right; background: var(--color-background-secondary); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--color-border-secondary);}
+  input[type=range] { flex: 1; accent-color: var(--color-brand-primary);}
+  .stage-scores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 2rem 0; }
+  .sc-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; text-align: center; border: 1px solid var(--color-border-secondary);}
+  .sc-val { font-size: 22px; font-weight: 800; color: var(--color-text-primary); }
+  .sc-lbl { font-size: 11px; font-weight: 700; color: var(--color-text-tertiary); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.05em;}
+  
+  .result-bar-wrap { margin: 2rem 0 1.5rem; }
+  .result-bar-bg { background: var(--color-border-secondary); border-radius: 8px; height: 32px; overflow: hidden; position: relative; }
+  .result-bar-fill { height: 100%; border-radius: 8px; transition: width .3s ease-out, background .3s ease-out; display: flex; align-items: center; padding: 0 12px; }
+  .result-bar-text { font-size: 13px; font-weight: 800; color: #ffffff; }
+  .threshold-line { position: absolute; top: 0; height: 100%; width: 3px; background: var(--color-text-primary); z-index: 10;}
+  
+  .result-row { display: flex; align-items: center; gap: 12px; margin-top: 1.25rem; }
+  .verdict { font-size: 14px; font-weight: 700; padding: 6px 16px; border-radius: 20px; }
+  .v-accept { background: var(--color-background-success); color: var(--color-text-success); border: 1px solid #A7F3D0;}
+  .v-reject { background: var(--color-background-danger); color: var(--color-text-danger); border: 1px solid #FECACA;}
+  .v-cb { background: var(--color-background-warning); color: var(--color-text-warning); border: 1px solid #FDE68A;}
+  .cb-notice { font-size: 13px; font-weight: 600; color: var(--color-text-warning); padding: 1rem; background: var(--color-background-warning); border-radius: var(--border-radius-md); margin-top: 1.25rem; display: none; line-height: 1.6; border-left: 4px solid var(--color-text-warning);}
+
+  .ai-tabs { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .ai-tab { font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: 20px; border: 1px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; transition: all 0.2s;}
+  .ai-tab.active { background: var(--color-brand-primary); color: var(--color-background-primary); border-color: var(--color-brand-primary); }
+  .ai-panel { display: none; background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.75rem; border: 1px solid var(--color-border-secondary);}
+  .ai-panel.active { display: block; }
+
+  /* Track Badge Selector */
+  .track-selector-wrapper { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 2rem 0; background: var(--color-background-secondary); padding: 12px; border-radius: var(--border-radius-lg); border: 1px solid var(--color-border-secondary);}
+  .track-badge { padding: 10px 16px; background: var(--color-background-primary); border: 1px solid var(--color-border-primary); border-radius: 6px; font-size: 13px; font-weight: 700; color: var(--color-text-secondary); text-align: center; flex: 1; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.02);}
+  .track-badge:hover { border-color: var(--color-brand-primary); color: var(--color-brand-primary); }
+  .track-badge.highlight { background: var(--color-brand-primary); color: white; border-color: var(--color-brand-dark); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);}
+  .track-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+  .track-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+  
+  /* ACCORDION Layout for Stages */
+  .step-card-grid { display: flex; flex-direction: column; gap: 16px; margin: 1.5rem 0; width: 100%; }
+  .step-pane { 
+      border: 1px solid var(--color-border-secondary); 
+      border-radius: var(--border-radius-lg); 
+      background: var(--color-background-primary); 
+      display: flex; 
+      flex-direction: column; 
+      overflow: hidden; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  }
+  
+  /* The clickable accordion header */
+  .step-pane-header { 
+      background: var(--color-brand-dark); 
+      color: #ffffff; 
+      padding: 1.25rem 1.5rem; 
+      display: flex; 
+      flex-direction: row; 
+      justify-content: space-between; 
+      align-items: center; 
+      cursor: pointer;
+      transition: background 0.2s;
+  }
+  .step-pane-header:hover {
+      background: #1e40af;
+  }
+  .step-header-left { display: flex; flex-direction: column; gap: 4px; }
+  .step-header-title { font-size: 15px; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; line-height: 1.4; }
+  .step-header-meta { font-size: 12px; font-weight: 600; color: #93C5FD; }
+  
+  /* Chevron Icon */
+  .step-header-icon { width: 24px; height: 24px; fill: currentColor; transition: transform 0.3s ease; opacity: 0.8; }
+  .step-pane.open .step-header-icon { transform: rotate(180deg); opacity: 1; }
+
+  /* Body expands */
+  .step-pane-body { 
+      display: none; 
+      padding: 1.75rem; 
+      flex-direction: column; 
+      gap: 16px; 
+  }
+  .step-pane.open .step-pane-body { display: flex; }
+
+  .sub-header { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-brand-dark); background: var(--color-brand-light); padding: 6px 10px; border-radius: 4px; border-left: 3px solid var(--color-brand-primary); margin-bottom: 8px; width: max-content;}
+  .metric-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .metric-list li { font-size: 13px; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.6; border-bottom: 1px solid var(--color-border-tertiary); padding-bottom: 8px;}
+  .metric-list li:last-child { border-bottom: none; padding-bottom: 0; }
+  .metric-list li::before { content: "■"; color: var(--color-brand-primary); font-size: 9px; margin-top: 5px; }
+  .metric-list strong { color: var(--color-text-primary); }
+
+  .code-diff-container { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 0.75rem 0; }
+  @media (min-width: 1024px) { .code-diff-container { grid-template-columns: 1fr 1fr; } }
+  .code-box { font-family: var(--font-mono); font-size: 11.5px; background: #0F172A; color: #F8FAFC; padding: 14px; border-radius: 6px; overflow-x: auto; border: 1px solid #334155; position: relative; margin: 0;}
+  .code-box-label { position: absolute; top: 6px; right: 10px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6; }
+  .code-bad { border-left: 3px solid var(--color-danger); }
+  .code-good { border-left: 3px solid var(--color-success); }
+
+  .telemetry-suite { background: #0F172A; color: #38BDF8; border-radius: var(--border-radius-md); padding: 16px; font-family: var(--font-mono); font-size: 12px; border: 1px solid #0284C7; position: relative; margin-top: 8px;}
+  .telemetry-suite::before {content: "DEEP-AUDIT TELEMETRY / SCORING"; position: absolute; top: -8px; left: 12px; background: #0284C7; color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 800; letter-spacing: 0.1em;}
+  .kpi-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
+  .kpi-row { display: flex; justify-content: space-between; border-bottom: 1px solid #1E293B; padding: 6px 0; align-items: baseline;}
+  .kpi-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .kpi-label { color: #94A3B8; font-weight: 600; }
+  .kpi-val { font-weight: 800; color: #34D399; text-align: right;}
+  .kpi-val.warn { color: #FBBF24; }
+  .kpi-val.danger { color: #F87171; }
+
+</style>
+</head>
+<body>
+
+<div class="doc">
+  <div class="cover">
+    <div class="cover-label">Engineering Assessment Lead · Proxify</div>
+    <div class="cover-title">A Vetting System for the Agentic Era</div>
+    <div class="cover-sub">A proposal for how Proxify identifies the top 1% of engineers at scale — in a world where any candidate can generate syntactically perfect code in under twenty minutes.</div>
+  </div>
+
+  <div class="callout">
+    <p>The thesis: when AI can write the code, the test can no longer be the code. This proposal redesigns Proxify's evaluation pipeline from first principles — redefining what engineering excellence means, how it is measured, and how measurement is validated against real-world placement outcomes. Every stage, every score, and every circuit breaker in this system exists for one reason: to prove that what we select for in the funnel predicts what clients experience on day ninety.</p>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <div class="toc-grid">
+      <div class="toc-item" onclick="scrollToId('s1')"><span class="toc-num">01</span> The Core Structural Paradigm</div>
+      <div class="toc-item" onclick="scrollToId('s2')"><span class="toc-num">02</span> The 6 Dimensions of Engineering Excellence</div>
+      <div class="toc-item" onclick="scrollToId('s3')"><span class="toc-num">03</span> The 5-Stage Vetting Funnel & Eros</div>
+      <div class="toc-item" onclick="scrollToId('s4')"><span class="toc-num">04</span> The Technical Track Matrices (Deep Dive)</div>
+      <div class="toc-item" onclick="scrollToId('s5-ai')"><span class="toc-num">05</span> AI in the System — Three Angles</div>
+      <div class="toc-item" onclick="scrollToId('s6')"><span class="toc-num">06</span> Vector-Space Matching Model</div>
+      <div class="toc-item" onclick="scrollToId('s7')"><span class="toc-num">07</span> Scoring Architecture & Circuit Breaker Simulator</div>
+      <div class="toc-item" onclick="scrollToId('s8')"><span class="toc-num">08</span> Measurement, Predictiveness & Eros Validation</div>
+      <div class="toc-item" onclick="scrollToId('s9')"><span class="toc-num">09</span> Scalability, Calibration & Operations</div>
+      <div class="toc-item" onclick="scrollToId('s-tradeoffs')"><span class="toc-num">10</span> Where This System Can Fail</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section id="s1">
+    <div class="section-tag">01 · Problem framing</div>
+    <div class="section-title">The Core Problem: Syntax is Dead</div>
+    <p>The existing foundational stages of elite screening map directly to the highest-validity predictors. However, when a candidate can generate syntactically perfect code via Copilot in under 20 minutes, the standard coding test stops measuring engineering excellence and starts measuring prompt fluency. The signal inverts.</p>
+    
+    <div class="comp-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="comp-card">
+        <div class="comp-card-title">1. The Signal Problem</div>
+        <p style="font-size:13px;margin:0">Coding tests measure syntax execution. The AI era requires measuring judgment, system thinking, and the ability to validate AI output. Coding can be delegated; judgment cannot.</p>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card-title">2. The Proof Problem</div>
+        <p style="font-size:13px;margin:0">If the assessment doesn't mathematically predict client satisfaction downstream, the value proposition is unvalidated. We must install a continuous feedback loop into Eros.</p>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card-title">3. The Scale Problem</div>
+        <p style="font-size:13px;margin:0">At 150,000+ applications, human inconsistency compounds. Without calibration and automated circuit breakers, interviewer drift turns the funnel into a lottery.</p>
+      </div>
+    </div>
+
+    <p style="margin-top: 2rem; font-size:14px; color:var(--color-text-secondary); line-height:1.7;">One final note before the proposal begins. A system this detailed is only valuable if it can be implemented. The rollout sequence matters as much as the design. In the first 90 days: deploy Stage 1 written screens and Stage 2 sandbox for two tracks — Backend and Full-Stack — to establish baseline data while keeping live defense capacity manageable. In months three to six: add remaining tracks, begin collecting 90-day JPS from placed candidates, run first inter-rater calibration session. At six months: first quarterly refit of stage weights based on Pearson correlation data. The system reaches full operational confidence — all tracks, all stages, calibrated weights, validated circuit breakers — at approximately 12 months. Stakeholders who need to be aligned before launch: VP Assessment for rubric sign-off, Head of Talent Acquisition for stage sequencing integration with ATS, RnD leads per track for sandbox problem validation, and at least one client-side senior engineer per track for external content review.</p>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section id="s2">
+    <div class="section-tag">02 · Framework Definition</div>
+    <div class="section-title">The 6 Dimensions of Engineering Excellence</div>
+    <p>Before redesigning the funnel, we must define what we are actually measuring. Every stage in this system — every question, every sandbox bug, every live constraint — maps back to one or more of these six dimensions. A candidate's final score is not a single number. It is a vector across six axes. That vector is what Eros uses to match talent to clients. That vector is what 90-day job performance data validates or challenges quarter over quarter. These are not soft competencies. Each one is operationally defined, independently scored, and weighted by downstream predictive validity.</p>
+    
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">01</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">Architectural Judgment</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">The ability to decompose ambiguous systems, anticipate scaling bottlenecks, and reason about technical trade-offs before a single line of code is written.</div>
+        <div style="font-size:13px; color:var(--color-text-tertiary); font-style:italic; line-height:1.7;">Strong signal: names the failure mode before proposing the fix. Weak signal: jumps to implementation without articulating what they are solving or why.</div>
+      </div>
+    </div>
+    
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">02</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">Ambiguity Navigation</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">The ability to progress from a vague, unrefined business problem to a shipped solution without waiting for perfectly groomed requirements.</div>
+        <div style="font-size:13px; color:var(--color-text-tertiary); font-style:italic; line-height:1.7;">Strong signal: defines what they do not know before defining what they will build. Weak signal: treats every ambiguous problem as already defined and skips straight to solutions.</div>
+      </div>
+    </div>
+    
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">03</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">Agentic Fluency</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">The ability to safely orchestrate AI tools to accelerate output while critically auditing every suggestion for hallucinations, security flaws, and correctness.</div>
+        <div style="font-size:13px; color:var(--color-text-tertiary); font-style:italic; line-height:1.7;">Strong signal: modifies AI output, questions it, and times their acceptance deliberately. Weak signal: accepts suggestions in under three seconds without reading them — logged by the sandbox as a Blind Acceptance Event.</div>
+      </div>
+    </div>
+    
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">04</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">Async Collaboration</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">The ability to operate effectively across timezones through disciplined documentation, proactive communication, and maintaining high visibility without being asked.</div>
+        <div style="font-size:13px; color:var(--color-text-tertiary); font-style:italic; line-height:1.7;">Strong signal: structures written answers as if the reader has no context. Weak signal: assumes shared knowledge, skips reasoning, delivers conclusions without explanation.</div>
+      </div>
+    </div>
+    
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">05</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">Technical Articulation</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">The ability to translate complex architectural decisions and technical trade-offs into clear business language for non-technical stakeholders.</div>
+        <div style="font-size:13px; color:var(--color-text-tertiary); font-style:italic; line-height:1.7;">Strong signal: explains a database transaction constraint in terms of money and risk without using the word "transaction." Weak signal: responds to a business question with a technical answer the listener cannot act on.</div>
+      </div>
+    </div>
+    
+    <div style="display:flex; padding:2rem 0;">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">06</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">Outcome Velocity</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">The ability to consistently prioritize business impact over technical completeness, shipping the right thing fast rather than the perfect thing late.</div>
+        <div style="font-size:13px; color:var(--color-text-tertiary); font-style:italic; line-height:1.7;">Strong signal: scopes a solution to the minimum that solves the stated problem and ships it. Weak signal: gold-plates the implementation, adds unrequested features, and misses the deadline.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section id="s3">
+    <div class="section-tag">03 · Funnel Design</div>
+    <div class="section-title">The 5-Stage Vetting Pipeline</div>
+    <p>Most hiring funnels are elimination machines. Ours is a signal amplifier. Automation protects human bandwidth — so by the time a senior engineer sits across from a candidate, the conversation is never about syntax. It is about judgment. Stages 3, 4, and 5 below form the technical evaluation core. They are specified in full detail in the next section.</p>
+
+    <div class="funnel-vis" id="funnelVis"></div>
+
+    <div class="funnel-list">
+      <div class="funnel-row-item">
+        <div class="funnel-num">01</div>
+        <div class="funnel-text">
+          <div class="funnel-name">Algorithmic Trajectory Screen</div>
+          <div class="funnel-desc">Fully automated ATS parsing. Evaluates years of experience, tech stack depth, English proficiency signals, and market supply-demand ratio for the candidate's skill set. Documented top-decile contributors — active core maintainers of major open source packages, for example — receive an automatic fast-track flag that bypasses Stage 02 and routes them directly to Stage 04.</div>
+        </div>
+      </div>
+      <div class="funnel-row-item">
+        <div class="funnel-num">02</div>
+        <div class="funnel-text">
+          <div class="funnel-name">Communication Baseline</div>
+          <div class="funnel-desc">A 15-minute async video recording. Camera must be on. The candidate responds to one open-ended technical scenario and explains their reasoning out loud. Scored on linguistic clarity, structured articulation, and professional confidence by an AI audio and video parser. This stage does not auto-reject. It produces a Communication Score that is carried forward and weighted in the final composite. For client-facing roles, a low Communication Score triggers an escalation flag that the client engagement manager reviews before the Live Defense. Frequency of this stage is configurable per role — roles with high client communication requirements treat it as mandatory; roles that are primarily async and heads-down treat it as optional and data-collecting only.</div>
+        </div>
+      </div>
+      <div class="funnel-row-item">
+        <div class="funnel-num">03</div>
+        <div class="funnel-text">
+          <div class="funnel-name">Written Diagnostic and Direction Screen</div>
+          <div class="funnel-desc">Two async written questions with no interviewer present. The first tests technical decomposition — given a real production failure, walk through the exact diagnostic steps. The second tests direction-setting under ambiguity — given a vague business problem and no system access, define what you do not know, structure the investigation, and describe how you would orchestrate AI as part of it. Together these two questions measure the signal that implementation tests cannot: whether the candidate thinks before they build.</div>
+        </div>
+      </div>
+      <div class="funnel-row-item">
+        <div class="funnel-num">04</div>
+        <div class="funnel-text">
+          <div class="funnel-name">Guarded Sandbox</div>
+          <div class="funnel-desc">A 90-minute take-home project delivered inside a sandboxed IDE with full AI tool access. The candidate receives a broken codebase and must find and fix every bug. AI usage is not just allowed — it is tracked. The sandbox records every prompt sent, every suggestion received, and the time between receiving AI output and accepting it. A candidate who accepts AI suggestions in under three seconds without modification logs a Blind Acceptance Event. High counts collapse the Agentic Fluency score. What we measure is not whether they used AI. It is whether they understood what AI gave them.</div>
+        </div>
+      </div>
+      <div class="funnel-row-item">
+        <div class="funnel-num">05</div>
+        <div class="funnel-text">
+          <div class="funnel-name">Live System Defense</div>
+          <div class="funnel-desc">A 60-minute live video call with a senior Proxify engineer. No AI tools. No hints. The candidate opens with their submitted sandbox code and defends every decision. The interviewer then injects five compounding constraints one at a time — each one designed to break the candidate's existing design. Culture fit, remote-work dependability, and consulting posture are assessed here as scored dimensions of the live defense, not as a separate stage. Candidates who pass receive an evaluation vector that is automatically pushed to Eros, Proxify's AI matching engine, for immediate client ranking.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: THE TECHNICAL TRACK MATRICES -->
+  <section id="s4">
+    <div class="section-tag">04 · Technical Depth</div>
+    <div class="section-title">The Technical Track Matrices</div>
+    <p>We do not just evaluate code; we dissect the human-in-the-loop decision matrix. The stages below correspond directly to Stages 03, 04, and 05 of the five-stage pipeline — the Written Diagnostic, Guarded Sandbox, and Live Defense — specified independently for each specialist track. Stages 01 and 02 are universal across all tracks and are not repeated here. Select a track to review its precise constraints and telemetry thresholds.</p>
+
+    <div class="track-selector-wrapper">
+      <div class="track-badge highlight" onclick="switchTrack('track-frontend', this)">1. Frontend Expert</div>
+      <div class="track-badge" onclick="switchTrack('track-backend', this)">2. Backend Expert</div>
+      <div class="track-badge" onclick="switchTrack('track-fullstack', this)">3. Full-Stack Specialist</div>
+      <div class="track-badge" onclick="switchTrack('track-devops', this)">4. DevOps & Cloud</div>
+      <div class="track-badge" onclick="switchTrack('track-data-ai', this)">5. Data & AI</div>
+    </div>
+
+    <!-- ==============================================
+         TRACK 1: FRONTEND EXPERT (4-STAGE SPEC)
+         ============================================== -->
+    <div id="track-frontend" class="track-content active">
+      <h3 style="margin-top: 0; color: var(--color-brand-dark);">Frontend Expert: The Full Lifecycle Pipeline</h3>
+      <p>Measurement Target: React reconciliation, rendering pipelines, ambiguity navigation, and main-thread execution performance. <em>Technology Selection: Default to React; Next.js accepted as a bonus signal for SSR/hydration evaluation.</em></p>
+      
+      <div class="step-card-grid">
+        <!-- S1 (Open Default) -->
+        <div class="step-pane open">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 1: Async Screen</span>
+              <span class="step-header-meta">30 Mins • Format: Written</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Diagnostic Interrogation</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Question given to the candidate:</strong> A client's React checkout page freezes for 800ms every time a user clicks the "Pay Now" button. The conversion rate has dropped 12%. You have Chrome DevTools open. Walk me through exactly what you do, step by step, from the moment you reproduce the freeze.</p>
+            <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Six dimensions scored 0–10 by a human reviewer using a fixed rubric:</p>
+            <ul class="metric-list">
+              <li><strong>D1 — Root cause identification (Wt 0.25):</strong> A strong candidate says: the main thread is being blocked during the click handler — likely a synchronous heavy computation, a layout thrash from reading and writing DOM properties, or a large re-render cascade. A weak candidate says "it is probably a slow API call" without touching the rendering pipeline.</li>
+              <li><strong>D2 — Correct tooling named (Wt 0.15):</strong> We expect: Chrome Performance tab to capture a trace, React Profiler to identify which components re-rendered, and the INP metric.</li>
+              <li><strong>D3 — Rendering model understood (Wt 0.25):</strong> Expect explanation of React reconciliation. If they cannot explain why a `setState` call causes a synchronous render before paint, they fail.</li>
+              <li><strong>D4 — Concrete fix proposed (Wt 0.20):</strong> Acceptable: move heavy computation into `useMemo`, break calculation into chunks using `requestIdleCallback`, or offload to a Web Worker.</li>
+              <li><strong>D5 — Secondary risks raised (Wt 0.10):</strong> Mentioning context splitting or `useReducer` as structural fix is strong.</li>
+              <li><strong>D6 — Communication structure (Wt 0.05):</strong> Does it go: reproduce, trace, identify, fix, verify?</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1 = (D1×0.25 + D2×0.15 + D3×0.25 + D4×0.20 + D5×0.10 + D6×0.05) × 10. Max S1 = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1:</span> <span class="kpi-val danger">IF D3 &lt; 7 OR D4 &lt; 7 → DISQUALIFY. Do not proceed to Stage 1B.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">Total 42 out of 60 or higher. D3 and D4 must each be 7 or above.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S1B -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 1B: Direction Screen</span>
+              <span class="step-header-meta">45 Mins • Ambiguity Navigation</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Direction & Outcome Framing</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Question given to the candidate:</strong> A fintech product manager tells you: "Our dashboard feels slow and users are dropping off but we don't know what to fix first." You have no access to the codebase. No metrics. No Lighthouse reports. You have one hour with the frontend lead tomorrow. What do you do? Describe which parts you use AI for and how you prompt it.</p>
+            <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Four dimensions scored 0–10 by a human reviewer:</p>
+            <ul class="metric-list">
+              <li><strong>D1B — Problem decomposition (Wt 0.30):</strong> A direction setter asks: perceived or measured slowness? Initial load or interaction? Device-specific?</li>
+              <li><strong>D2B — Ambiguity navigation (Wt 0.25):</strong> Do they structure their answer around what they do not know and define the minimum viable information needed?</li>
+              <li><strong>D3B — Outcome framing (Wt 0.25):</strong> Do they connect technical investigation to business signal (conversion rate, bounce rate, trust)?</li>
+              <li><strong>D4B — AI orchestration strategy (Wt 0.20):</strong> Strong: "I define four diagnostic hypotheses... prompt AI to generate a structured interrogation checklist for each with DevTools steps... review checklist myself."</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1B = (D1B×0.30 + D2B×0.25 + D3B×0.25 + D4B×0.20) × 10. Max S1B = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1B:</span> <span class="kpi-val danger">IF D3B &lt; 5 AND D1B &lt; 5 → DISQUALIFY.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">Total 60 out of 100 or higher. D4B must be 5 or above.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S2 -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 2: Guarded Sandbox</span>
+              <span class="step-header-meta">90 Mins • GitHub Repo</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">The Stock Ticker Test</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Task given to the candidate:</strong> This repository contains a Next.js real-time stock ticker (`components/StockTicker.tsx`). It connects to a WebSocket. Under sustained load it produces a memory leak, causes React re-render storms, and crashes the browser. Fix it.</p>
+            <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Four deliberate bugs to fix:</p>
+            <ul class="metric-list" style="margin-bottom:12px;">
+                <li><strong>Bug 1 — Dependency array infinite loop:</strong> `useEffect` lists `stocks`. Fix: use a ref buffer.</li>
+                <li><strong>Bug 2 — Stale closure:</strong> Socket handler captures initial empty `stocks` array. Fix: functional updater or ref.</li>
+                <li><strong>Bug 3 — No WebSocket cleanup:</strong> Fix: return cleanup calling `socket.close()`.</li>
+                <li><strong>Bug 4 — Unbatched DOM updates:</strong> Blocking main thread. Fix: flush to state on a `requestAnimationFrame` loop.</li>
+            </ul>
+            <div class="code-diff-container">
+              <div class="code-box code-bad">
+                <span class="code-box-label">Broken Code Provided</span>
+<pre>export default function StockTicker() {
+  const [stocks, setStocks] = useState&lt;Stock[]&gt;([]);
+  useEffect(() => {
+    const socket = new WebSocket("wss://feed.example.com");
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setStocks([...stocks, data]);
+    };
+  }, [stocks]);
+  
+  return (&lt;div&gt;...&lt;/div&gt;);
+}</pre>
+              </div>
+              <div class="code-box code-good">
+                <span class="code-box-label">The Correct Solution</span>
+<pre>export default function StockTicker() {
+  const [stocks, setStocks] = useState&lt;Stock[]&gt;([]);
+  const buffer = useRef&lt;Stock[]&gt;([]);
+  const frameRef = useRef&lt;number&gt;();
+  useEffect(() => {
+    // Implement rAF batching and cleanup here
+    // ...
+  }, []);
+  // ...render logic
+}</pre>
+              </div>
+            </div>
+            
+            <p style="font-size:13px; font-weight:700; margin-top: 12px; margin-bottom: 8px;">Five automated tests & AI interaction audit (run before human review):</p>
+            <ul class="metric-list">
+                <li><strong>T1 — Re-render storm:</strong> Puppeteer fires 200 messages. Pass = &lt; 30 render cycles.</li>
+                <li><strong>T2 — Memory leak:</strong> Puppeteer unmounts, measures heap delta. Pass = returns within 5MB.</li>
+                <li><strong>T3 — Stale closure:</strong> Send 50 messages, check UI length. Pass = 50 items.</li>
+                <li><strong>T4 — INP stress test:</strong> Simulate clicks. Pass = INP &lt; 200ms.</li>
+                <li><strong>T5 — AST scan:</strong> Scans for missing cleanup, etc. Pass = zero violations.</li>
+                <li><strong>T6 — AI interaction audit:</strong> Scored via TTA and MR.</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">AI Score (AIS):</span> <span class="kpi-val" style="color:#F1F5F9;">TTA_Score + MR_Score. Maximum AIS = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Base Test Score (BTS):</span> <span class="kpi-val" style="color:#F1F5F9;">((T1+T2+T3+T4+T5) / 5) × 100. Max = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 2 Formula (S2):</span> <span class="kpi-val" style="color:#34D399;">(BTS × 0.70) + (AIS × 0.30). Max S2 = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB2:</span> <span class="kpi-val danger">IF T1 = 0 AND T2 = 0 → DISQUALIFY. IF (T1+T2+T3+T4) &lt; 3 → DISQUALIFY.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">T1, T2, T3, T4 must all pass. T5 clean. T6 reviewed by human.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S3 -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 3: Live Defense</span>
+              <span class="step-header-meta">60 Mins • Video Call</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Live Architecture Stress</div>
+            <p style="font-size:13px; margin-bottom:8px;"><strong>Opening question:</strong> "Walk me through why you chose requestAnimationFrame instead of setInterval for batching. What does requestAnimationFrame give you that setInterval does not?"</p>
+            <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Five constraints injected one at a time:</p>
+            <ul class="metric-list" style="margin-bottom:12px;">
+                <li><strong>C1 — Offline-first:</strong> Dashboard must work offline. Expected: Service Worker cache-first.</li>
+                <li><strong>C2 — Micro-frontend split:</strong> Expected: Shared React instance singleton in webpack config.</li>
+                <li><strong>C3 — WebSocket blocked:</strong> Expected: Fall back to Server-Sent Events (SSE).</li>
+                <li><strong>C4 — Mobile OOM crash:</strong> Expected: Sliding window on stocks array, Virtualization.</li>
+                <li><strong>C5 — Dynamic i18n required:</strong> Expected: Lazy-load via dynamic import, CSS font-display swap.</li>
+            </ul>
+            <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Four dimensions scored 1–5 live:</p>
+            <ul class="metric-list">
+                <li><strong>L1 — Recovery under pressure (0.30)</strong></li>
+                <li><strong>L2 — Correctness of solution (0.25)</strong></li>
+                <li><strong>L3 — Trade-off awareness (0.25)</strong></li>
+                <li><strong>L4 — Communication clarity (0.20)</strong></li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Score formula (S3):</span> <span class="kpi-val" style="color:#F1F5F9;">((L1×0.30 + L2×0.25 + L3×0.25 + L4×0.20) / 5) × 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB3:</span> <span class="kpi-val danger">IF any of L1, L2, L3, L4 &lt; 3 → DISQUALIFY.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">No score below 3. Total 16 out of 20 or higher.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCORING MODEL (Collapsed by default) -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Scoring Model & Predictive Validity</span>
+              <span class="step-header-meta">Circuit Breakers & Validation Loop</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body" style="background: var(--color-background-secondary); border-top: none;">
+              <h4 style="color: var(--color-brand-dark); margin-top: 0; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid #CBD5E1; padding-bottom:8px; margin-bottom:12px;">Final Composite Score</h4>
+              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A; margin-bottom: 8px;">F = (S1 × 0.15) + (S1B × 0.15) + (S2 × 0.40) + (S3 × 0.30)</p>
+              <div style="display: flex; gap: 12px; font-size:12px; font-weight:700; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                  <span style="background:#10B981; color:white; padding:4px 8px; border-radius:4px;">F ≥ 82: Proceed, top tier</span>
+                  <span style="background:#F59E0B; color:white; padding:4px 8px; border-radius:4px;">65 ≤ F &lt; 82: Conditional, human review</span>
+                  <span style="background:#EF4444; color:white; padding:4px 8px; border-radius:4px;">F &lt; 65: Reject</span>
+              </div>
+              <h4 style="color: var(--color-text-primary); margin-top: 0; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--color-border-secondary); padding-bottom:8px; margin-bottom:12px;">Predictive Validation</h4>
+              <ul class="metric-list">
+                  <li><strong>Job Performance Score (JPS) at 90 days:</strong> P1 = manager rating (wt 0.50). P2 = code review pass rate (wt 0.25). P3 = prod incidents inverted (wt 0.15). <strong>P4 = Core Web Vitals regression rate</strong> (wt 0.10).<br><strong style="color:var(--color-brand-primary)">Frontend JPS = (P1×0.50 + P2×0.25 + (10 − P3×2)×0.15 + (10 − P4×10)×0.10)</strong></li>
+                  <li><strong>Predictive validity:</strong> r = Pearson(F_vector, JPS_vector). Target r ≥ 0.55.</li>
+                  <li><strong>Quarterly weight refit (n ≥ 50):</strong> New weight = r_i / (r1 + r1B + r2 + r3).</li>
+              </ul>
+          </div>
+        </div>
+
+      </div> <!-- End step-card-grid -->
+    </div> <!-- END FRONTEND TRACK -->
+
+    <!-- ==============================================
+         TRACK 2: BACKEND EXPERT (4-STAGE SPEC)
+         ============================================== -->
+    <div id="track-backend" class="track-content" style="display: none;">
+      <h3 style="margin-top: 0; color: var(--color-brand-dark);">Backend Expert: The Full Lifecycle Pipeline</h3>
+      <p>Measurement Target: ACID transaction integrity, ambiguity navigation, connection pool starvation bounds, and thread-blocking detection.</p>
+      
+      <div class="step-card-grid">
+        <!-- S1 -->
+        <div class="step-pane open">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 1: Async Screen</span>
+              <span class="step-header-meta">30 Mins • Format: Written</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Diagnostic Interrogation</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Question given to the candidate:</strong> A payment microservice is processing concurrent ledger updates and suddenly starts throwing deadlock errors under load. The DBA shows you a lock graph in Postgres. You have no access to change the database schema. Walk me through exactly what you do, step by step, from the moment you see the error.</p>
+            <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Six dimensions scored 0–10 by a human reviewer using a fixed rubric:</p>
+            <ul class="metric-list">
+              <li><strong>D1 — Root cause identification (Wt 0.25):</strong> Strong candidate says concurrent transactions acquire row locks in different orders.</li>
+              <li><strong>D2 — Correct tooling named (Wt 0.15):</strong> Expect pg_locks, pg_stat_activity, pg_blocking_pids().</li>
+              <li><strong>D3 — Isolation levels understood (Wt 0.25):</strong> Distinguish Read Committed from Serializable.</li>
+              <li><strong>D4 — Concrete fix proposed (Wt 0.20):</strong> Enforce consistent lock acquisition order.</li>
+              <li><strong>D5 — Secondary risks raised (Wt 0.10):</strong> Connection pool exhaustion.</li>
+              <li><strong>D6 — Communication structure (Wt 0.05):</strong> Logical flow.</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1 = (D1×0.25 + D2×0.15 + D3×0.25 + D4×0.20 + D5×0.10 + D6×0.05) × 10. Max S1 = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1:</span> <span class="kpi-val danger">IF D3 &lt; 7 OR D4 &lt; 7 → DISQUALIFY.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">Total 42 out of 60 or higher. D3 and D4 must each be 7 or above.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S1B -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 1B: Direction Screen</span>
+              <span class="step-header-meta">45 Mins • Ambiguity Navigation</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Direction & Outcome Framing</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Question given to the candidate:</strong> A fintech startup has 200,000 daily active users. Their engineering lead tells you: "Our payments are getting slower and customers are complaining but we don't know why." You have no access to their codebase, no metrics, no logs. You have one hour with their CTO tomorrow. What do you do? Describe which parts of this investigation you would use AI for and exactly how you would prompt it.</p>
+            <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Four dimensions scored 0–10 by a human reviewer:</p>
+            <ul class="metric-list">
+              <li><strong>D1B — Problem decomposition (Wt 0.30):</strong> Direction setter defines diagnostic questions first.</li>
+              <li><strong>D2B — Ambiguity navigation (Wt 0.25):</strong> Acknowledge unknowns and structure answer around uncertainty.</li>
+              <li><strong>D3B — Outcome framing (Wt 0.25):</strong> Reference business impact (churn, SLA breach).</li>
+              <li><strong>D4B — AI orchestration strategy (Wt 0.20):</strong> Define diagnostic hypotheses, then use AI to generate structured interrogation checklist.</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1B = (D1B×0.30 + D2B×0.25 + D3B×0.25 + D4B×0.20) × 10. Max S1B = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1B:</span> <span class="kpi-val danger">IF D3B &lt; 5 AND D1B &lt; 5 → DISQUALIFY.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">Total 60 out of 100 or higher. D4B must be 5 or above.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S2 -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 2: Guarded Sandbox</span>
+              <span class="step-header-meta">90 Mins • GitHub Repo</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">The Distributed Ledger Test</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Task given to the candidate:</strong> This repository contains a .NET 8 Web API that processes batch ledger updates. It fails under concurrent load (deadlocks, duplicate writes, data loss). Fix the POST /api/ledger/batch endpoint.</p>
+            <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Four deliberate bugs to fix:</p>
+            <ul class="metric-list" style="margin-bottom:12px;">
+                <li><strong>Bug 1:</strong> SaveChangesAsync inside the loop. Fix: move outside inside single transaction.</li>
+                <li><strong>Bug 2:</strong> No transaction boundary. Fix: BeginTransactionAsync.</li>
+                <li><strong>Bug 3:</strong> FindAsync does not acquire a row lock. Fix: WHERE clause inside transaction.</li>
+                <li><strong>Bug 4:</strong> No idempotency guard. Fix: accept Idempotency-Key header, store in Redis.</li>
+            </ul>
+            <div class="code-diff-container">
+              <div class="code-box code-bad">
+                <span class="code-box-label">Broken Code Provided</span>
+<pre>[HttpPost("batch")]
+public async Task&lt;IActionResult&gt; ProcessBatch([FromBody] BatchRequest request)
+{
+    foreach (var item in request.Items)
+    {
+        var record = await _context.Ledger.FindAsync(item.Id);
+        record.Balance += item.Amount;
+        await _context.SaveChangesAsync();
+    }
+    return Ok();
+}</pre>
+              </div>
+              <div class="code-box code-good">
+                <span class="code-box-label">The Correct Solution</span>
+<pre>[HttpPost("batch")]
+public async Task&lt;IActionResult&gt; ProcessBatch(...)
+{
+    // Implementation of Redis lock, ReadCommitted tx, and batched updates
+}</pre>
+              </div>
+            </div>
+            
+            <p style="font-size:13px; font-weight:700; margin-top: 12px; margin-bottom: 8px;">Five automated tests & AI interaction audit:</p>
+            <ul class="metric-list">
+                <li><strong>T1 — Deadlock test:</strong> Fire 50 concurrent requests. Pass = zero exceptions.</li>
+                <li><strong>T2 — Lost update test:</strong> Fire 100 concurrent requests each adding 10. Pass = exact sum.</li>
+                <li><strong>T3 — Idempotency test:</strong> Second request returns 409.</li>
+                <li><strong>T4 — Rollback test:</strong> Inject deliberate failure. Pass = zero items committed.</li>
+                <li><strong>T5 — AST scan:</strong> Pass = zero async void, Task.Wait() or SaveChanges inside loops.</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">AI Score (AIS):</span> <span class="kpi-val" style="color:#F1F5F9;">TTA_Score + MR_Score. Maximum AIS = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Base Test Score (BTS):</span> <span class="kpi-val" style="color:#F1F5F9;">((T1+T2+T3+T4+T5) / 5) × 100. Max = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 2 Formula (S2):</span> <span class="kpi-val" style="color:#34D399;">(BTS × 0.70) + (AIS × 0.30). Max S2 = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB2:</span> <span class="kpi-val danger">IF T1 = 0 AND T2 = 0 → DISQUALIFY. IF (T1+T2+T3+T4) &lt; 3 → DISQUALIFY.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S3 -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 3: Live Defense</span>
+              <span class="step-header-meta">60 Mins • Video Call</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Live Architecture Stress</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Opening question:</strong> "Walk me through your transaction design. Why ReadCommitted and not Serializable?"</p>
+            <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Five constraints injected one at a time:</p>
+            <ul class="metric-list" style="margin-bottom:12px;">
+                <li><strong>C1 — Message queues banned:</strong> Expected: transactional outbox pattern.</li>
+                <li><strong>C2 — Redis crashes mid-batch:</strong> Expected: transaction commits/rolls back atomically.</li>
+                <li><strong>C3 — 10x traffic spike:</strong> Expected: Connection pool exhaustion identified.</li>
+                <li><strong>C4 — GDPR field encryption:</strong> Expected: app-level AES-256 before writing.</li>
+                <li><strong>C5 — Multi-region active-active:</strong> Expected: acknowledge conflict, last-write-wins.</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Score formula (S3):</span> <span class="kpi-val" style="color:#F1F5F9;">((L1×0.30 + L2×0.25 + L3×0.25 + L4×0.20) / 5) × 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB3:</span> <span class="kpi-val danger">IF any of L1, L2, L3, L4 &lt; 3 → DISQUALIFY.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCORING MODEL (Collapsed by default) -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Scoring Model & Predictive Validity</span>
+              <span class="step-header-meta">Circuit Breakers & Validation Loop</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body" style="background: var(--color-background-secondary); border-top: none;">
+              <h4 style="color: var(--color-brand-dark); margin-top: 0; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid #CBD5E1; padding-bottom:8px; margin-bottom:12px;">Final Composite Score</h4>
+              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A; margin-bottom: 8px;">F = (S1 × 0.15) + (S1B × 0.15) + (S2 × 0.40) + (S3 × 0.30)</p>
+              <div style="display: flex; gap: 12px; font-size:12px; font-weight:700; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                  <span style="background:#10B981; color:white; padding:4px 8px; border-radius:4px;">F ≥ 82: Proceed, top tier</span>
+                  <span style="background:#F59E0B; color:white; padding:4px 8px; border-radius:4px;">65 ≤ F &lt; 82: Conditional, human review</span>
+                  <span style="background:#EF4444; color:white; padding:4px 8px; border-radius:4px;">F &lt; 65: Reject</span>
+              </div>
+              <h4 style="color: var(--color-text-primary); margin-top: 0; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--color-border-secondary); padding-bottom:8px; margin-bottom:12px;">Predictive Validation</h4>
+              <ul class="metric-list">
+                  <li><strong>Job Performance Score (JPS) at 90 days:</strong> P1 = manager rating (wt 0.50). P2 = code review pass rate (wt 0.35). P3 = prod incidents per month inverted (wt 0.15). <strong>JPS = (P1×0.50 + P2×0.35 + (10 − P3×2)×0.15).</strong></li>
+                  <li><strong>Predictive validity:</strong> r = Pearson(F_vector, JPS_vector). Target r ≥ 0.55.</li>
+              </ul>
+          </div>
+        </div>
+      </div> <!-- End step-card-grid -->
+    </div> <!-- END BACKEND TRACK -->
+
+    <!-- ==============================================
+         TRACK 3: FULL-STACK SPECIALIST (4-STAGE SPEC)
+         ============================================== -->
+    <div id="track-fullstack" class="track-content" style="display: none;">
+      <h3 style="margin-top: 0; color: var(--color-brand-dark);">Full-Stack Specialist: The Full Lifecycle Pipeline</h3>
+      <p>Measurement Target: API caching bounds, distributed idempotency, cross-layer coordination, and optimistic UI rollback fidelity.</p>
+      
+      <div class="step-card-grid">
+        <!-- S1 -->
+        <div class="step-pane open">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 1: Async Screen</span>
+              <span class="step-header-meta">30 Mins • Format: Written</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Diagnostic Interrogation</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Question given to the candidate:</strong> A full-stack application built on Angular, FastAPI, and MongoDB is showing three simultaneous symptoms after yesterday's deployment. First: some users see duplicate transactions in their billing history. Second: some users see a zero balance immediately after a confirmed payment, then the correct balance appears 30 seconds later. Third: the checkout button occasionally fires and nothing happens — no error, no success, no network request visible in DevTools. Walk me through exactly what you do.</p>
+            <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Six dimensions scored 0–10 by a human reviewer using a fixed rubric:</p>
+            <ul class="metric-list">
+              <li><strong>D1 — Root cause decomposition across layers (Wt 0.25):</strong> Duplicates = missing API idempotency. Zero balance = MongoDB read concern issue. Silent button = Angular subscription swallowed error.</li>
+              <li><strong>D2 — Correct tooling named across stack (Wt 0.15):</strong> DevTools, FastAPI logs, Atlas profiler.</li>
+              <li><strong>D3 — MongoDB consistency model understood (Wt 0.25):</strong> Must explain replica set lag.</li>
+              <li><strong>D4 — Concrete fix proposed (Wt 0.20):</strong> Duplicates: idempotency key. Lag: read concern "majority". Button: exhaustMap.</li>
+              <li><strong>D5 — Deployment correlation (Wt 0.10):</strong> Diff the deployment first.</li>
+              <li><strong>D6 — Communication structure (Wt 0.05):</strong> Separate symptoms, assign layer, propose tool, propose fix.</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1 = (D1×0.25 + D2×0.15 + D3×0.25 + D4×0.20 + D5×0.10 + D6×0.05) × 10. Max S1 = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1:</span> <span class="kpi-val danger">IF D3 &lt; 7 OR D1 &lt; 7 → DISQUALIFY.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S1B -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 1B: Direction Screen</span>
+              <span class="step-header-meta">45 Mins • Ambiguity Navigation</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Direction & Outcome Framing</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Question given to the candidate:</strong> A product manager tells you: "Users are reporting that the checkout feels broken. Sometimes it works, sometimes it doesn't, and we've had three reports of people being charged twice in the last week." You have no access to the codebase, no logs. What do you do? Describe which parts you use AI for.</p>
+            <ul class="metric-list">
+              <li><strong>D1B — Problem decomposition (Wt 0.30):</strong> Separate double-charge from intermittent failure.</li>
+              <li><strong>D2B — Ambiguity navigation (Wt 0.25):</strong> Define minimum viable questions to eliminate hypotheses.</li>
+              <li><strong>D3B — Outcome framing (Wt 0.25):</strong> Quantify business exposure. Revenue & trust problem.</li>
+              <li><strong>D4B — AI orchestration strategy (Wt 0.20):</strong> Strong: Use AI to generate hypothesis tree and diagnostic questions.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- S2 -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 2: Guarded Sandbox</span>
+              <span class="step-header-meta">90 Mins • GitHub Repo</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">The Workspace Billing Test</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Task given to the candidate:</strong> Workspace billing application (FastAPI+Motor; Angular). Fix duplicate events, over-allocations, and an Angular memory leak.</p>
+            <ul class="metric-list" style="margin-bottom:12px;">
+                <li><strong>Bugs 1-6:</strong> Mongo client per request, Race condition, No transaction, No idempotency, Angular leak (exhaustMap), No button loading state.</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">AI Score (AIS):</span> <span class="kpi-val" style="color:#F1F5F9;">TTA_Score + MR_Score. Maximum AIS = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 2 Formula (S2):</span> <span class="kpi-val" style="color:#34D399;">(BTS × 0.70) + (AIS × 0.30). Max S2 = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB2:</span> <span class="kpi-val danger">IF T1 = 0 AND T2 = 0 → DISQUALIFY. IF (T1+T2+T3) &lt; 2 → DISQUALIFY.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S3 -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 3: Live Defense</span>
+              <span class="step-header-meta">60 Mins • Video Call</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Live Architecture Stress</div>
+            <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Five constraints injected one at a time:</p>
+            <ul class="metric-list" style="margin-bottom:12px;">
+                <li><strong>C1 — Atlas outage:</strong> Expected: Circuit breaker (e.g. `tenacity`) returning 503.</li>
+                <li><strong>C2 — GDPR erasure:</strong> Expected: Pseudonymise PII fields via `updateMany`.</li>
+                <li><strong>C3 — Angular SSR:</strong> Expected: `isPlatformBrowser` guards.</li>
+                <li><strong>C4 — Lambda cold starts:</strong> Expected: Provisioned concurrency.</li>
+                <li><strong>C5 — Mongo aggregation cost:</strong> Expected: Compound indexes, Change Streams.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- SCORING MODEL (Collapsed by default) -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Scoring Model & Predictive Validity</span>
+              <span class="step-header-meta">Circuit Breakers & Validation Loop</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body" style="background: var(--color-background-secondary); border-top: none;">
+              <h4 style="color: var(--color-brand-dark); margin-top: 0; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid #CBD5E1; padding-bottom:8px; margin-bottom:12px;">Final Composite Score</h4>
+              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A; margin-bottom: 8px;">F = (S1 × 0.15) + (S1B × 0.15) + (S2 × 0.40) + (S3 × 0.30)</p>
+              <h4 style="color: var(--color-text-primary); margin-top: 1.5rem; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--color-border-secondary); padding-bottom:8px; margin-bottom:12px;">Predictive Validation</h4>
+              <ul class="metric-list">
+                  <li><strong>Job Performance Score (JPS) at 90 days:</strong> P1 = manager rating (wt 0.40). <strong>P2 = Cross-layer bug rate</strong> (wt 0.25). P3 = code review pass rate (wt 0.20). P4 = incident involvement inverted (wt 0.15).</li>
+              </ul>
+          </div>
+        </div>
+      </div> <!-- End step-card-grid -->
+    </div> <!-- END FULLSTACK TRACK -->
+
+    <!-- ==============================================
+         TRACK 4: DEVOPS & CLOUD (4-STAGE SPEC)
+         ============================================== -->
+    <div id="track-devops" class="track-content" style="display: none;">
+      <h3 style="margin-top: 0; color: var(--color-brand-dark);">DevOps & Cloud: The Full Lifecycle Pipeline</h3>
+      <p>Measurement Target: IaC state corruption, ambiguity navigation, zero-trust perimeter enforcement, KMS rotation mechanics, and blast-radius containment.</p>
+      
+      <div class="step-card-grid">
+        <!-- S1 -->
+        <div class="step-pane open">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 1: Async Screen</span>
+              <span class="step-header-meta">30 Mins • Format: Written</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Diagnostic Interrogation</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Question given to the candidate:</strong> A developer pushed a commit containing your production database credentials, an AWS access key, and a private API token to a public GitHub repository six minutes ago. You just found out. Walk me through exactly what you do.</p>
+            <ul class="metric-list">
+              <li><strong>D1 — Immediate containment order (Wt 0.25):</strong> Rotate and revoke exposed credentials first.</li>
+              <li><strong>D2 — Correct tooling named (Wt 0.15):</strong> AWS IAM, git filter-repo, CloudTrail.</li>
+              <li><strong>D3 — Blast radius assessment (Wt 0.25):</strong> Query CloudTrail for API calls during exposure window.</li>
+              <li><strong>D4 — Process fix proposed (Wt 0.20):</strong> Pre-commit hooks, AWS Secrets Manager.</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1:</span> <span class="kpi-val danger">IF D1 &lt; 7 OR D3 &lt; 7 → DISQUALIFY. (Non-negotiable IR)</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S1B -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 1B: Direction Screen</span>
+              <span class="step-header-meta">45 Mins • Ambiguity Navigation</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Direction & Outcome Framing</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Question given to the candidate:</strong> A startup CTO tells you: "Our AWS bill tripled last month and our CI/CD pipeline now takes 45 minutes." You have no access to AWS/Repo. What do you do?</p>
+            <ul class="metric-list">
+              <li><strong>D1B — Problem decomposition (Wt 0.30):</strong> Separate cost vs slow pipeline diagnostic trees.</li>
+              <li><strong>D4B — AI orchestration strategy (Wt 0.20):</strong> Prompt AI with two separate requests for checklists.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- S2 -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 2: Guarded Sandbox</span>
+              <span class="step-header-meta">90 Mins • GitHub Repo</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">The Terraform Infrastructure Test</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Task:</strong> Terraform configuration for a production environment. Fix every security violation and infra gap.</p>
+            <ul class="metric-list" style="margin-bottom:12px;">
+                <li><strong>Bugs 1-5:</strong> Hardcoded pass, Public DB SG, Unencrypted RDS, Wildcard IAM, No remote state backend.</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB2:</span> <span class="kpi-val danger">IF T1 CRITICAL &gt; 0 AND T2 = FAIL → DISQUALIFY.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S3 -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 3: Live Defense</span>
+              <span class="step-header-meta">60 Mins • Video Call</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Live Architecture Stress</div>
+            <ul class="metric-list" style="margin-bottom:12px;">
+                <li><strong>C1 — us-east-1 down:</strong> Expected: State should be replicated.</li>
+                <li><strong>C2 — Corrupted locked state:</strong> Expected: force-unlock ONLY after confirming dead process. Reconcile drift.</li>
+                <li><strong>C3 — GDPR data residency:</strong> Expected: DR to EU region, bucket replication EU-only.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- SCORING MODEL -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Scoring Model & Predictive Validity</span>
+              <span class="step-header-meta">Circuit Breakers & Validation Loop</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body" style="background: var(--color-background-secondary); border-top: none;">
+              <h4 style="color: var(--color-brand-dark); margin-top: 0; font-size:14px; font-weight:800;">Final Composite Score</h4>
+              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A;">F = (S1 × 0.15) + (S1B × 0.15) + (S2 × 0.40) + (S3 × 0.30)</p>
+              <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom:12px;"><strong>Rationale:</strong> Stage 1 carries elevated importance for DevOps because incident response is not theoretical.</p>
+              <h4 style="color: var(--color-text-primary); margin-top: 1.5rem; font-size:14px; font-weight:800;">Predictive Validation</h4>
+              <ul class="metric-list">
+                  <li><strong>Job Performance Score (JPS):</strong> P1 = manager rating (wt 0.40). P2 = MTTR on prod incidents (wt 0.30). P3 = security violations (wt 0.20). P4 = pipeline reliability (wt 0.10).</li>
+              </ul>
+          </div>
+        </div>
+      </div> <!-- End step-card-grid -->
+    </div> <!-- END DEVOPS TRACK -->
+
+    <div id="track-data-ai" class="track-content" style="display:none">
+      <h3 style="margin-top: 0; color: var(--color-brand-dark);">Data & AI: The Full Lifecycle Pipeline</h3>
+      <p>Measurement Target: Pipeline resilience, production ML deployment, and the ability to separate data engineering decisions from model decisions. Stack: Python, Scikit-learn, PyTorch, FastAPI, Airflow, MLflow.</p>
+      
+      <div class="step-card-grid">
+        <!-- Stage 1 -->
+        <div class="step-pane open">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 1: Async Screen</span>
+              <span class="step-header-meta">30 Mins · Written</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Pipeline Failure Diagnosis</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Question:</strong> "A Spotify-scale music platform ingests 4 million track-play events per hour. Yesterday their Airflow pipeline silently dropped 800,000 events — no alert fired, no job failed, the dashboard showed green. The data science team only noticed when the recommendation model started surfacing 2019 tracks to users expecting 2025 releases. Walk me through exactly what you do from the moment you read that message."</p>
+            <ul class="metric-list">
+              <li><strong>D1 — Root cause decomposition (Wt 0.25):</strong> Strong: immediately separates three failure layers — ingestion, pipeline, and detection. Names that a green dashboard with missing data means the monitoring system itself is broken. Weak: says "check Airflow logs" and treats it as a single-layer problem.</li>
+              <li><strong>D2 — Correct tooling named (Wt 0.15):</strong> Expects Airflow task logs and XCom inspection, Kafka consumer group lag metrics or S3 inventory counts, Great Expectations or row-count assertions, CloudWatch or Datadog for the missing alerting layer.</li>
+              <li><strong>D3 — Data quality model understood (Wt 0.25):</strong> Must explain the difference between a job succeeding and data being complete. Airflow marks task success based on exit code, not row counts. Circuit breaker if they cannot explain this.</li>
+              <li><strong>D4 — Concrete fix proposed (Wt 0.20):</strong> Row-count reconciliation sensor between ingestion and transformation tasks, watermark-based completeness checks, dead-letter queue monitoring.</li>
+              <li><strong>D5 — Downstream model impact acknowledged (Wt 0.10):</strong> Names that the recommendation model degraded because it trained on incomplete data. Proposes model input validation before any retraining job fires.</li>
+              <li><strong>D6 — Communication structure (Wt 0.05):</strong> Follows detect, contain, diagnose, fix, prevent sequence.</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1 = (D1×0.25 + D2×0.15 + D3×0.25 + D4×0.20 + D5×0.10 + D6×0.05) × 10. Max S1 = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1:</span> <span class="kpi-val danger">IF D3 &lt; 7 OR D1 &lt; 7 → DISQUALIFY.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">Total 42 out of 60. D1 and D3 must each be 7 or above.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 1B -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 1B: Direction Screen</span>
+              <span class="step-header-meta">45 Mins · Ambiguity Navigation</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Model Degradation Under Ambiguity</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Question:</strong> "A retail CTO tells you: 'Our churn prediction model was 84% accurate six months ago. Now it's making obviously wrong predictions and our retention team has stopped trusting it. We don't know what changed.' You have no access to their codebase, no model artifacts, no feature store. You have one hour with their lead data scientist tomorrow. What do you do? Describe which parts you use AI for and exactly how you prompt it."</p>
+            <ul class="metric-list">
+              <li><strong>D1B — Problem decomposition (Wt 0.30):</strong> Separates three candidate causes — data drift, concept drift, and training-serving skew — before investigating any of them. Weak: says "retrain the model" as the first step.</li>
+              <li><strong>D2B — Ambiguity navigation (Wt 0.25):</strong> Defines minimum viable questions: when did accuracy start dropping, gradually or suddenly? Was there a product or pricing change? Has the model been retrained at any point or is the same artifact still serving?</li>
+              <li><strong>D3B — Outcome framing (Wt 0.25):</strong> Names that the retention team has stopped trusting the model and that trust loss is as damaging as the accuracy drop. Priority is restoring confidence in the system, not just fixing the model.</li>
+              <li><strong>D4B — AI orchestration strategy (Wt 0.20):</strong> Weak: "ask AI to diagnose the model." Strong: "describe three drift hypotheses to AI, ask it to generate a diagnostic checklist for each — what specific metric would confirm or eliminate this hypothesis given no system access — review checklist, use it to guide the meeting."</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1B = (D1B×0.30 + D2B×0.25 + D3B×0.25 + D4B×0.20) × 10. Max S1B = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1B:</span> <span class="kpi-val danger">IF D3B &lt; 5 AND D1B &lt; 5 → DISQUALIFY.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">Total 60 out of 100. D4B must be 5 or above.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 2: Guarded Sandbox</span>
+              <span class="step-header-meta">90 Mins · GitHub Repo</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">The Broken ML Pipeline</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Task:</strong> "This repository contains a production churn prediction system with a Scikit-learn training pipeline, a FastAPI inference endpoint, and an Airflow DAG that retrains weekly. Under load it produces stale predictions, leaks training data into production scoring, and crashes on schema changes. Fix all of it. Training script: ml/train.py. Inference endpoint: api/predict.py."</p>
+            <ul class="metric-list">
+              <li><strong>Bug 1 — Model trained on wrong target:</strong> model.fit(X_scaled, X_scaled) trains on features not labels. Fix: model.fit(X_scaled, y). Most critical — silent wrong output, no error thrown.</li>
+              <li><strong>Bug 2 — Data leakage:</strong> scaler runs fit_transform on full dataset before train/test split. Leaks test set statistics into scaler. Fix: split first, fit scaler on training rows only.</li>
+              <li><strong>Bug 3 — Scaler not saved with model:</strong> only model is pickled. Inference has no scaler — raw features passed to a model trained on scaled features. Fix: save scaler and model together, apply same transformation at inference.</li>
+              <li><strong>Bug 4 — No input schema validation:</strong> endpoint accepts raw dict. Missing features or wrong types cause silent NaN or crash. Fix: Pydantic model with explicit required fields matching training feature set.</li>
+              <li><strong>Bug 5 — No model reload mechanism:</strong> FastAPI loads model once at startup. After DAG retrains and writes new artifact, old model keeps serving until restart. Fix: version artifacts by timestamp in MLflow or S3, check for newer version on configurable interval, reload atomically.</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Tests:</span> <span class="kpi-val" style="color:#F1F5F9;">T1 — Correct target test: outputs are binary 0/1 labels not feature arrays. T2 — Data leakage test: scaler.fit called only after split. T3 — Pipeline serialization test: both scaler and model present and loadable. T4 — Schema validation test: malformed request returns 422 not 500. T5 — Model versioning test: endpoint loads new artifact after reload interval without restart.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Base Test Score (BTS):</span> <span class="kpi-val" style="color:#F1F5F9;">((T1+T2+T3+T4+T5)/5)×100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 2 Formula (S2):</span> <span class="kpi-val" style="color:#34D399;">(BTS×0.70)+(AIS×0.30).</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB2:</span> <span class="kpi-val danger">IF T1 = 0 → DISQUALIFY immediately. IF (T1+T2+T3) &lt; 2 → DISQUALIFY.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 3 -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Stage 3: Live Defense</span>
+              <span class="step-header-meta">60 Mins · Video Call</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body">
+            <div class="sub-header">Live Architecture Stress</div>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Opening question:</strong> "Walk me through why you separated the scaler from the model in your artifacts. What specific failure does that separation prevent compared to fitting a new scaler at inference time?"</p>
+            <ul class="metric-list">
+              <li><strong>Constraint 1 — Model retraining produces worse accuracy:</strong> new model scores 71%, down from 84%. Retrain job succeeded. Expected: model validation gate — run new artifact against frozen held-out validation set before promotion. Wrong: tune hyperparameters.</li>
+              <li><strong>Constraint 2 — GDPR right to erasure on training data:</strong> user wants records deleted including weights learned from their data. Expected: delete raw records immediately, explain that model weights do not contain recoverable PII and deletion is generally not legally required, retrain on cleaned data at next cycle, purge cached predictions. Wrong: delete the model and retrain immediately.</li>
+              <li><strong>Constraint 3 — Feature store goes down mid-inference:</strong> endpoint returning 500 errors, cannot take it down. Expected: fallback to most recent cached feature vector with staleness flag in response, or rule-based score requiring no external lookup. Degraded predictions are better than no predictions.</li>
+              <li><strong>Constraint 4 — Training data volume triples overnight:</strong> upstream team changed ingestion, new segment the model was never trained to handle. Expected: data validation step at start of DAG — assert row count, feature distributions, label balance within bounds before training begins. Halt and alert if assertion fails.</li>
+              <li><strong>Constraint 5 — Real-time scoring required under 50ms:</strong> current model takes 300ms. Cannot change model architecture. Expected: pre-compute churn scores nightly, cache in Redis with TTL matching retrain frequency. Inference becomes a Redis lookup. Name the trade-off: scores are up to 24 hours stale.</li>
+            </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Evaluation Dimensions:</span> <span class="kpi-val" style="color:#F1F5F9;">L1 — Recovery under pressure (Wt 0.30). L2 — Correctness of solution (Wt 0.25). L3 — Trade-off awareness (Wt 0.25). L4 — Communication clarity (Wt 0.20).</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Score formula (S3):</span> <span class="kpi-val" style="color:#F1F5F9;">((L1×0.30 + L2×0.25 + L3×0.25 + L4×0.20)/5)×100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB3:</span> <span class="kpi-val danger">IF any dimension &lt; 3 → DISQUALIFY.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">No score below 3. Total 16 out of 20.</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scoring Model -->
+        <div class="step-pane">
+          <div class="step-pane-header" onclick="toggleStep(this)">
+            <div class="step-header-left">
+              <span class="step-header-title">Scoring Model & Predictive Validity</span>
+              <span class="step-header-meta">Circuit Breakers & Validation Loop</span>
+            </div>
+            <svg class="step-header-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="step-pane-body" style="background: var(--color-background-secondary); border-top: none;">
+              <h4 style="color: var(--color-brand-dark); margin-top: 0; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid #CBD5E1; padding-bottom:8px; margin-bottom:12px;">Final Composite Score</h4>
+              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A; margin-bottom: 8px;">F = (S1×0.15) + (S1B×0.15) + (S2×0.40) + (S3×0.30).</p>
+              <div style="display: flex; gap: 12px; font-size:12px; font-weight:700; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                  <span style="background:#10B981; color:white; padding:4px 8px; border-radius:4px;">F ≥ 82: Proceed</span>
+                  <span style="background:#F59E0B; color:white; padding:4px 8px; border-radius:4px;">65 ≤ F &lt; 82: Conditional human review</span>
+                  <span style="background:#EF4444; color:white; padding:4px 8px; border-radius:4px;">F &lt; 65: Reject</span>
+              </div>
+              <h4 style="color: var(--color-text-primary); margin-top: 0; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--color-border-secondary); padding-bottom:8px; margin-bottom:12px;">Predictive Validation</h4>
+              <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom:12px;">Job Performance Score at 90 days tracks pipeline reliability rate (weight 0.30), model accuracy stability (weight 0.20), and data incident rate (weight 0.10) alongside manager rating (weight 0.40). Target predictive validity r ≥ 0.55 once n ≥ 30.</p>
+          </div>
+        </div>
+
+      </div> <!-- End step-card-grid -->
+    </div> <!-- END DATA/AI TRACK -->
+
+  </section>
+
+  <!-- SECTION 5: AI IN THE SYSTEM -->
+  <section id="s5-ai">
+    <div class="section-tag">05 · AI in the System</div>
+    <div class="section-title">Three Angles on AI</div>
+    <p>The assignment asked for three distinct positions on AI. They are addressed here directly, before the technical specifications, because every design decision in Section 04 follows from the positions taken here.</p>
+
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">A</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">Candidate AI Usage</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">How candidates use AI is not the threat. Blind trust in AI output is the threat. The system does not restrict AI — it measures the relationship between the candidate and the AI. Every sandbox session tracks Time to Accept and Modification Rate. A candidate who pastes AI output without reading it fails not because they used AI but because they demonstrated they cannot validate what AI gives them. That skill — critical review of AI output — is the exact skill the highest-performing engineers of the next decade will need. Restricting AI in assessment is like testing driving skills in a parking lot with the engine off.</div>
+      </div>
+    </div>
+
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">B</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">AI as Part of the Funnel</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">Three places where AI improves the funnel itself. First: the ATS screen uses AI to parse trajectory signals that a keyword filter cannot — identifying engineers whose GitHub contributions show systems thinking even when their CV uses different terminology. Second: Stage 1 written responses are AI-scored against a fixed rubric as a triage layer before human review — this reduces reviewer load by approximately 60% while maintaining calibration because the rubric dimensions are objective enough for reliable automated scoring. Third: the communication baseline video is AI-parsed for linguistic clarity and structured articulation, producing a score that feeds into the final composite without requiring a human to watch every recording. What AI does not do: make final hiring decisions, score the live defense, or interpret ambiguous answers at the boundary of pass and fail thresholds. Those decisions require a human.</div>
+      </div>
+    </div>
+
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">C</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">Failure Modes and Gaming</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">Four ways this system can be broken and what the design does about each. First: a candidate who has seen these exact broken codebases before will score well on pattern recognition, not engineering judgment — mitigation is quarterly rotation of the sandbox problem. Second: the TTA metric can be gamed by waiting artificially before accepting AI output — the system cross-references TTA against MR, so waiting thirty seconds then accepting with zero modifications scores the same as accepting in two seconds. Third: the written direction screen can be answered with AI-generated frameworks that sound structured but contain no genuine reasoning — human reviewers are calibrated specifically to recognize generic frameworks with no specific hypothesis, no named diagnostic tool, no concrete question. Fourth: the live defense cannot be gamed because the constraints are injected in real time and are designed to break whatever the candidate submitted.</div>
+      </div>
+    </div>
+
+    <p style="font-size:14px; color:var(--color-text-tertiary); font-style:italic; padding-top:1.5rem;">The system is not designed to catch cheaters. It is designed so that cheating does not produce the signal we are looking for.</p>
+  </section>
+
+  <!-- SECTION 6: MATCHING MODEL (RADAR CHART) -->
+  <section id="s6">
+    <div class="section-tag">06 · Algorithmic Matching</div>
+    <div class="section-title">The Vector-Space Matching Model</div>
+    <p>The output of the 5-Stage funnel is not a binary "Pass/Fail." It is a high-fidelity data payload. The proprietary <strong>Talent-to-Task Vector Model</strong> maps candidate scores onto a 6-dimensional geometric space, calculating suitability against client project requirements via Euclidean distance.</p>
+    
+    <div class="dash-container">
+      <div class="dash-header" style="background:var(--color-background-secondary); padding:1rem; border:1px solid var(--color-border-secondary); border-radius:var(--border-radius-lg) var(--border-radius-lg) 0 0; display:flex; justify-content:space-between; align-items:center;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <h3 style="margin: 0; font-size: 18px;">Candidate Vector Profile</h3>
+          <span style="font-size: 11px; background: #E0E7FF; color: #4338CA; padding: 4px 8px; border-radius: 4px; font-weight: 700;">ID: 894-ALPHA</span>
+        </div>
+        <div style="font-size: 13px; color: var(--color-text-secondary); font-weight: 600;">Composite Match Index (CMI)</div>
+      </div>
+      
+      <div class="dash-body" style="border:1px solid var(--color-border-secondary); border-top:none; padding:1.5rem; border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
+          <div>
+            <div style="font-size: 42px; font-weight: 800; color: #0F172A; line-height: 1;">94.2%</div>
+            <div style="font-size: 12px; color: #059669; font-weight: 700; margin-top: 6px;">↑ Contextual Alpha Multiplier (+1.15x)</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 13px; font-weight: 600; color: var(--color-text-tertiary); margin-bottom: 4px;">Optimized Rate</div>
+            <div style="font-size: 24px; font-weight: 800; color: #0F172A;">€52<span style="font-size: 16px; color: #64748B;">/h</span></div>
+          </div>
+        </div>
+        
+        <div style="position: relative; width: 100%; height: 340px; display: flex; justify-content: center; align-items: center; margin: 2rem 0 1rem; background: #F8FAFC; border-radius: 8px; border: 1px solid #E2E8F0;">
+          <svg width="280" height="280" viewBox="0 0 200 200" style="position: absolute; z-index: 1;">
+            <polygon points="100,10 178,55 178,145 100,190 22,145 22,55" fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="4 4"/>
+            <polygon points="100,40 152,70 152,130 100,160 48,130 48,70" fill="none" stroke="#E2E8F0" stroke-width="1"/>
+            <polygon points="100,70 126,85 126,115 100,130 74,115 74,85" fill="#F1F5F9" stroke="#E2E8F0" stroke-width="1"/>
+            <line x1="100" y1="100" x2="100" y2="10" stroke="#CBD5E1" stroke-width="1"/>
+            <line x1="100" y1="100" x2="178" y2="55" stroke="#CBD5E1" stroke-width="1"/>
+            <line x1="100" y1="100" x2="178" y2="145" stroke="#CBD5E1" stroke-width="1"/>
+            <line x1="100" y1="100" x2="100" y2="190" stroke="#CBD5E1" stroke-width="1"/>
+            <line x1="100" y1="100" x2="22" y2="145" stroke="#CBD5E1" stroke-width="1"/>
+            <line x1="100" y1="100" x2="22" y2="55" stroke="#CBD5E1" stroke-width="1"/>
+            <polygon points="100,10 170,59 162,136 100,163 38,136 30,59" fill="rgba(37, 99, 235, 0.15)" stroke="#2563EB" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle cx="100" cy="10" r="4" fill="#1E3A8A" />
+            <circle cx="170" cy="59" r="4" fill="#1E3A8A" />
+            <circle cx="162" cy="136" r="4" fill="#1E3A8A" />
+            <circle cx="100" cy="163" r="4" fill="#1E3A8A" />
+            <circle cx="38" cy="136" r="4" fill="#1E3A8A" />
+            <circle cx="30" cy="59" r="4" fill="#1E3A8A" />
+          </svg>
+          <div style="position: absolute; top: 15px; text-align: center; z-index: 2;">
+            <div style="font-size: 12px; font-weight: 800; color: #0F172A;">Architectural Judgment</div>
+          </div>
+          <div style="position: absolute; top: 25%; right: 15px; text-align: right; z-index: 2;">
+            <div style="font-size: 12px; font-weight: 800; color: #0F172A;">Outcome Velocity</div>
+          </div>
+          <div style="position: absolute; bottom: 25%; right: 15px; text-align: right; z-index: 2;">
+            <div style="font-size: 12px; font-weight: 800; color: #0F172A;">Tech Articulation</div>
+          </div>
+          <div style="position: absolute; bottom: 15px; text-align: center; z-index: 2;">
+            <div style="font-size: 12px; font-weight: 800; color: #0F172A;">Async Collaboration</div>
+          </div>
+          <div style="position: absolute; bottom: 25%; left: 15px; text-align: left; z-index: 2;">
+            <div style="font-size: 12px; font-weight: 800; color: #0F172A;">Agentic Fluency</div>
+          </div>
+          <div style="position: absolute; top: 25%; left: 15px; text-align: left; z-index: 2;">
+            <div style="font-size: 12px; font-weight: 800; color: #0F172A;">Ambiguity Navigation</div>
+          </div>
+        </div>
+
+        <div class="formula">Calculated Match Vector Distance:
+D(C, R) = √[ w₁(C₁-R₁)² + w₂(C₂-R₂)² + ... + w₆(C₆-R₆)² ]
+
+Where C = Candidate Vector, R = Requisition Vector
+Result: Cosine Similarity 0.942 -> "Top Decile Alignment"</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: SCORING (SLIDERS) -->
+  <section id="s7">
+    <div class="section-tag">07 · System Math</div>
+    <div class="section-title">Scoring Architecture & Circuit Breaker Simulator</div>
+    
+    <div class="ai-tabs">
+      <div class="ai-tab active" onclick="switchAITab('candidate', this)">A · AI-Assisted vs Restricted</div>
+      <div class="ai-tab" onclick="switchAITab('funnel', this)">B · Pipeline Simulator</div>
+    </div>
+
+    <div class="ai-panel active" id="ai-candidate">
+      <div class="stance"><p><strong>Stance: Two stages only. And for different reasons.</strong></p></div>
+      <p style="font-size: 13px; margin-bottom: 10px;"><strong>Stage 5 — Live ambiguity interview: Restricted.</strong><br>Because what Stage 5 specifically measures is live, real-time human reasoning. The ability to think through an ambiguous problem out loud, navigate uncertainty in a conversation, and communicate a decision under mild pressure — without preparation time. That skill matters in real client work. In those moments AI isn't open on a second screen. The client is looking at you and waiting.</p>
+      
+      <p style="font-size: 13px; margin-bottom: 10px;"><strong>Stage 4 — Values interview: Restricted.</strong><br>Different reason. There's simply nothing for AI to help with. The interviewer is asking about your actual career history, how you handled a specific failure, why you left a company, how you behave under pressure. AI can't generate a genuine answer to "tell me about a time you pushed back on a client and were wrong."</p>
+    </div>
+    
+    <div class="ai-panel" id="ai-funnel">
+        <p style="font-size: 13px; margin-bottom: 1rem;">Adjust the candidate's hypothetical stage scores below to see how the mathematical Circuit Breaker evaluates their final <strong>Proxify Excellence Score (PES)</strong>.</p>
+        
+        <div class="sim-wrap">
+          <div class="sim-head">
+            <span>Dynamic Vector Weights</span>
+            <span>Threshold: 0.78</span>
+          </div>
+          <div class="sim-body">
+            <div class="slider-row">
+              <span class="slider-label">S3: Agentic Sandbox Score</span>
+              <input type="range" id="sl3" min="0" max="100" value="85" oninput="recalc()">
+              <span class="slider-val" id="sv3">0.85</span>
+            </div>
+            <div class="slider-row">
+              <span class="slider-label">S4: Values & Alignment Score</span>
+              <input type="range" id="sl4" min="0" max="100" value="90" oninput="recalc()">
+              <span class="slider-val" id="sv4">0.90</span>
+            </div>
+            <div class="slider-row">
+              <span class="slider-label">S5: Live Defense Score</span>
+              <input type="range" id="sl5" min="0" max="100" value="70" oninput="recalc()">
+              <span class="slider-val" id="sv5">0.70</span>
+            </div>
+            
+            <div class="stage-scores" id="stageCards"></div>
+            
+            <div class="result-bar-wrap">
+              <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+                <span style="font-size:12px;font-weight:800;color:var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Projected Model Output (PES)</span>
+              </div>
+              <div class="result-bar-bg">
+                <div class="result-bar-fill" id="resultFill" style="width:0%">
+                  <span class="result-bar-text" id="resultText"></span>
+                </div>
+                <div class="threshold-line" style="left:78%"></div>
+              </div>
+            </div>
+
+            <div class="result-row">
+              <span class="verdict" id="verdictBadge"></span>
+              <span class="ceiling-row" id="ceilingText" style="font-size: 13px; font-weight: 600;"></span>
+            </div>
+            <div class="cb-notice" id="cbNotice"></div>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7 -->
+  <section id="s8">
+    <div class="section-tag">08 · Measurement & Predictive Validity</div>
+    <div class="section-title">How We Know the Funnel Is Working</div>
+    <p>This section answers the question the JD asked most directly: how do you use data to validate that the assessment is reliable, accurate, and genuinely predictive of on-the-job performance? Three layers of measurement are required. The first validates that each stage measures what it claims to measure. The second validates that the stages predict downstream performance. The third validates that the system improves over time.</p>
+    
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">01</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">Inter-Rater Reliability</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">Stage 1 and Stage 1B scores are assigned by human reviewers. If two reviewers score the same response differently, the dimension is not reliably measured — and an unreliable measure cannot be predictive. We track Cohen's Kappa for every scored dimension across all reviewers every quarter. Target κ ≥ 0.70 for each dimension before it is used in a pass/fail decision. Dimensions scoring below κ = 0.60 are pulled from automated decision-making and flagged for rubric revision. Calibration sessions use a set of twenty anchor responses — five per score tier — that all reviewers must score before rating live candidates in a new quarter.</div>
+        <div style="font-size:13px; color:var(--color-text-tertiary); font-style:italic; line-height:1.7;">Signal: If κ drops below 0.60 on D1 or D3 in any track, the rubric is ambiguous and the circuit breaker for that dimension must be suspended until the rubric is revised and recalibrated.</div>
+      </div>
+    </div>
+
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">02</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">Predictive Validity Against 90-Day Performance</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">The funnel score F is meaningless unless it predicts something real. We collect a Job Performance Score from every placed candidate's manager at 90 days. JPS is a weighted composite of manager rating, code review pass rate, production incident rate, and a track-specific signal such as cross-layer bug rate for full-stack engineers or pipeline reliability rate for data engineers. We compute r = Pearson(F, JPS) monthly once n ≥ 30. Target r ≥ 0.55 at six months. If r < 0.40 at six months, the stage weights are wrong — we run a quarterly refit using each stage's individual correlation with JPS as its new weight.</div>
+        <div style="font-size:13px; color:var(--color-text-tertiary); font-style:italic; line-height:1.7;">Signal: r ≥ 0.55 is the minimum acceptable threshold. r ≥ 0.70 means the system is strong and stage weights are approximately correct. r < 0.40 means the system is measuring something other than what predicts job performance and a structural review is required.</div>
+      </div>
+    </div>
+
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">03</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">False Positive and False Negative Tracking</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">A false positive is a candidate who scored F ≥ 82 and received JPS &lt; 5 at 90 days — the funnel passed someone who failed. A false negative proxy is a candidate who scored F &lt; 65 and appeared in a strong senior engineering role at another company within six months — the funnel rejected someone who succeeded elsewhere. We track FPR and FNR monthly. Target FPR &lt; 0.10 and FNR &lt; 0.15. If FPR exceeds 0.15 for two consecutive quarters, Stage 2 circuit breakers must be tightened. If FNR exceeds 0.20, Stage 1 rubric thresholds are too aggressive and must be reviewed.</div>
+        <div style="font-size:13px; color:var(--color-text-tertiary); font-style:italic; line-height:1.7;">Signal: FPR is the more damaging error for Proxify — a client who receives a weak engineer loses trust in the network. FNR is damaging for supply — we are filtering engineers we should be placing. Both must be tracked independently and weighted differently in the operational response.</div>
+      </div>
+    </div>
+
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">04</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">A/B Testing the Funnel Itself</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">The funnel is not static. We run controlled experiments on individual stages to test whether changes improve predictive validity. Example: if we propose adding a fourth live defense constraint, we run it on 20% of candidates for one quarter and compare FPR, FNR, and r against the control group before rolling out. Experiments are never run during ramp-up periods — the first six months of operation use the default design to establish a baseline. Changes are validated with n ≥ 50 per arm before any weight or threshold adjustment is applied to the full funnel.</div>
+        <div style="font-size:13px; color:var(--color-text-tertiary); font-style:italic; line-height:1.7;">Signal: No change to the funnel — no new stage, no rubric revision, no weight adjustment — is made without a validated experiment or a quarterly refit based on n ≥ 50 downstream performance observations.</div>
+      </div>
+    </div>
+
+    <div style="display:flex; padding:2rem 0;">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">05</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">External Expert Calibration</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">Internal reviewers develop blind spots. Every six months, a panel of three to five external senior engineers — sourced from Proxify client companies and academic institutions with assessment expertise — reviews a sample of fifty scored responses across all tracks. They score the responses independently against the same rubric and their scores are compared against the internal baseline. Divergences above 15% on any dimension trigger a rubric review. For the data and AI track specifically, we engage an external ML practitioner to validate that the broken code problems reflect real production failure patterns, not academic exercises. For the predictive validity model, we engage a statistician to review the JPS formula and correlation methodology annually.</div>
+        <div style="font-size:13px; color:var(--color-text-tertiary); font-style:italic; line-height:1.7;">Signal: External review is not optional — it is the check on the check. Internal calibration maintains consistency. External calibration maintains accuracy.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8 -->
+  <section id="s9">
+    <div class="section-tag">09 · Scaling Architecture</div>
+    <div class="section-title">Scalability, Calibration & Operations</div>
+    <p>Processing 150,000+ applicants per year requires human effort to scale sub-linearly. By automating Stages 1 through 3, we protect valuable human resources.</p>
+    
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="comp-card-title">1. Automated Screening (Stages 1-3)</div>
+        <p style="font-size:13px;margin:0">Filters the initial 150,000+ candidates down to roughly 12,000 without using a single hour of human engineering time. Evaluates candidates programmatically against the telemetry matrices.</p>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card-title">2. Human-in-the-Loop (Stages 4-5)</div>
+        <p style="font-size:13px;margin:0">Human engineering bandwidth is deployed exclusively at the final stages. Because the automated circuit breakers filter out 92% of the noise, senior engineers only spend time interviewing candidates who survived the deep-audit sandbox.</p>
+      </div>
+    </div>
+
+    <!-- Human Calibration Optimization Block -->
+    <div style="background: var(--color-background-info); border-left: 4px solid var(--color-brand-primary); padding: 1.25rem 1.5rem; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; margin-top: 1.5rem;">
+      <h4 style="font-size: 15px; font-weight: 800; color: var(--color-brand-dark); margin-top: 0; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Interviewer Calibration Engine</h4>
+      <p style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 0;">With a pool of 100+ senior evaluators, scaling human steps risks rating drift. We mandate that 5% of Stage 5 Live Defenses are dual-graded (shadowed). If any interviewer's ratings deviate by more than +/-12% from the track cohort mean, the system triggers an automatic alignment flag and routes both graders to a calibration workshop.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 9: TRADEOFFS -->
+  <section id="s-tradeoffs">
+    <div class="section-tag">10 · Honest Assessment</div>
+    <div class="section-title">Where This System Can Fail</div>
+    <p>The assignment specifically asked for trade-offs and downsides. They are listed here without softening, because a system that cannot name its own weaknesses is not a system anyone should trust.</p>
+
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">01</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">The Pattern Recognition Problem</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">The sandbox problems are specific enough that a candidate who has seen similar broken codebases in a bootcamp or previous assessment will score well without understanding the underlying principles. The surface behaviors — correct fixes, clean diffs, passing tests — are identical to genuine understanding. Mitigation exists in the quarterly rotation and the live defense, but it is imperfect. A candidate who pattern-matched Stage 2 will be exposed in Stage 3. The system relies on this exposure being reliable. If candidates can also pattern-match the live defense constraints, the circuit breakers in Stage 3 need to be made stricter, not the sandbox harder.</div>
+      </div>
+    </div>
+
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">02</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">The Human Reviewer Calibration Problem</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">Stage 1 and Stage 1B scores are assigned by human reviewers using fixed rubrics. At 150,000 candidates per year, even small calibration drift between reviewers compounds into a meaningful false negative rate. The mitigation is quarterly calibration sessions using scored anchor responses and human confirmation on borderline rejections. But this is operationally expensive. If reviewer bandwidth becomes a bottleneck, the temptation will be to automate Stage 1 scoring entirely. That would be a mistake — the dimensions that matter most, specifically problem decomposition and outcome framing, are exactly the dimensions that resist reliable automated scoring because they require judgment about what the candidate chose not to say.</div>
+      </div>
+    </div>
+
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">03</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">The Communication Score Trade-off</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">The video communication baseline is configurable per role. Making it mandatory for all roles would filter out strong engineers who are slightly less polished communicators but who could grow into client-facing positions. Making it optional risks inconsistency — some clients receive candidates whose communication was never assessed. The current design accepts this trade-off in favor of not over-filtering a supply-constrained talent pool. It should be revisited once the system has enough data to correlate communication scores with 90-day client satisfaction ratings directly.</div>
+      </div>
+    </div>
+
+    <div style="display:flex; padding:2rem 0;">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">04</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">The 90-Day Feedback Loop Latency</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">The entire predictive validity model depends on collecting job performance scores at 90 days and feeding them back into stage weight calibration. This means the system will run with uncalibrated default weights for the first three to six months of operation, during which it will produce some false positives and false negatives that a calibrated system would not. The target is r ≥ 0.55 Pearson correlation between funnel score and 90-day JPS once n ≥ 30. Until that threshold is reached, human review is required on all borderline rejections. The system is designed to improve over time. It is not optimized at launch.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+function scrollToId(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleElement(header) {
+  const body = header.nextElementSibling;
+  const hint = header.querySelector('.expand-hint');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (hint) hint.textContent = isOpen ? 'Tap to close details' : 'Tap to expand details';
+}
+
+function toggleStep(header) {
+  const pane = header.parentElement;
+  pane.classList.toggle('open');
+}
+
+// Keep simulation engine active
+function switchAITab(panel, tab) {
+  document.querySelectorAll('.ai-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ai-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('ai-' + panel).classList.add('active');
+  tab.classList.add('active');
+  if(panel === 'funnel') recalc();
+}
+
+function switchTrack(trackId, element) {
+  // Update badge styles
+  document.querySelectorAll('.track-badge').forEach(b => b.classList.remove('highlight'));
+  element.classList.add('highlight');
+  
+  // Hide all track content
+  document.querySelectorAll('.track-content').forEach(c => {
+    c.style.display = 'none';
+    c.classList.remove('active');
+  });
+  
+  // Show selected track
+  const target = document.getElementById(trackId);
+  if(target) {
+    target.style.display = 'block';
+    setTimeout(() => target.classList.add('active'), 10);
+  }
+}
+
+const funnelStages = [
+  { label: '01 · Algorithmic Trajectory Screen', pct: 100, count: '150,000+' },
+  { label: '02 · Communication Baseline', pct: 55, count: '82,500' },
+  { label: '03 · Written Diagnostic & Direction Screen', pct: 20, count: '30,000' },
+  { label: '04 · Guarded Sandbox', pct: 8, count: '12,000' },
+  { label: '05 · Live System Defense', pct: 4, count: '6,000' },
+  { label: 'Eros Vetting Vector', pct: 1.5, count: 'Top 1%' },
+];
+const vis = document.getElementById('funnelVis');
+if(vis) {
+  funnelStages.forEach(s => {
+    const row = document.createElement('div');
+    row.className = 'funnel-row';
+    row.innerHTML = `<span class="funnel-label">${s.label}</span><div class="funnel-bar-wrap"><div class="funnel-bar-inner" style="width:${Math.max(s.pct, 8)}%;background:var(--color-brand-primary)">${s.pct}%</div></div><span class="funnel-count">${s.count}</span>`;
+    vis.appendChild(row);
+  });
+}
+
+// Custom weights: S3 (35%), S4 (20%), S5 (45%). Threshold 0.78
+const stageWeights = [0.35, 0.20, 0.45]; 
+const stageNames = ['Stage 3', 'Stage 4', 'Stage 5'];
+const THRESHOLD = 0.78;
+
+function recalc() {
+  const ids = ['sl3','sl4','sl5'];
+  let scores = [];
+  try {
+    scores = ids.map(id => parseInt(document.getElementById(id).value) / 100);
+  } catch(e) { return; }
+
+  ids.forEach((id, i) => {
+    document.getElementById('sv' + (i+3)).textContent = scores[i].toFixed(2);
+  });
+
+  const contributions = scores.map((s, i) => stageWeights[i] * s);
+  const final = contributions.reduce((a,b) => a+b, 0);
+
+  const cards = document.getElementById('stageCards');
+  if(cards) {
+    cards.innerHTML = stageNames.map((n,i) => {
+      const contrib = contributions[i];
+      return `<div class="sc-card"><div class="sc-val">${contrib.toFixed(2)}</div><div class="sc-lbl">${n} Wght</div></div>`;
+    }).join('');
+  }
+
+  const pct = Math.min(final / 1.0 * 100, 100);
+  const fill = document.getElementById('resultFill');
+  if (fill) {
+    fill.style.width = pct.toFixed(1) + '%';
+    fill.style.background = final >= THRESHOLD ? '#10B981' : '#EF4444'; // Emerald or Red
+  }
+  
+  const resultText = document.getElementById('resultText');
+  if (resultText) {
+    const formattedScore = final.toFixed(3);
+    resultText.textContent = formattedScore;
+  }
+
+  let accumulated = 0;
+  let cbStage = null;
+  for (let k = 0; k < 3; k++) {
+    accumulated += contributions[k];
+    const remainingCeiling = stageWeights.slice(k+1).reduce((a,b)=>a+b,0);
+    const ceiling = accumulated + remainingCeiling;
+    if (ceiling < THRESHOLD && k < 2) {
+      cbStage = k;
+      break;
+    }
+  }
+
+  const verdict = document.getElementById('verdictBadge');
+  const cbNotice = document.getElementById('cbNotice');
+  const ceilingText = document.getElementById('ceilingText');
+
+  if (verdict && cbNotice && ceilingText) {
+    const formattedScore = final.toFixed(3);
+    if (cbStage !== null) {
+      verdict.textContent = 'Circuit Break Activated';
+      verdict.className = 'verdict v-cb';
+      cbNotice.style.display = 'block';
+      cbNotice.innerHTML = `<strong>Hard Ejection:</strong> After ${stageNames[cbStage]}, the maximum possible theoretical score drops below the 0.78 requirement. Candidate is computationally disqualified.`;
+      ceilingText.textContent = '';
+    } else if (final >= THRESHOLD) {
+      verdict.textContent = 'Alignment Verified';
+      verdict.className = 'verdict v-accept';
+      cbNotice.style.display = 'none';
+      ceilingText.innerHTML = `Model Score: ${formattedScore} &ge; 0.78`;
+    } else {
+      verdict.textContent = 'Post-Pipeline Rejection';
+      verdict.className = 'verdict v-reject';
+      cbNotice.style.display = 'none';
+      ceilingText.innerHTML = `Model Score: ${formattedScore} &lt; 0.78`;
+    }
+  }
+}
+
+window.onload = function() {
+  recalc();
+};
+</script>
+</body>
+</html>
