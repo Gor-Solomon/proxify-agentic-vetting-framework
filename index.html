@@ -78,12 +78,24 @@
   .stage-body.open { display: block; }
   .expand-hint { font-size: 11px; font-weight: 600; color: var(--color-text-tertiary); margin-left: auto; }
 
-  .funnel-vis { display: flex; flex-direction: column; gap: 8px; margin: 2rem 0; }
+  .funnel-vis { display: flex; flex-direction: column; gap: 12px; margin: 2rem 0; }
   .funnel-row { display: flex; align-items: center; gap: 16px; }
   .funnel-bar-wrap { flex: 1; }
   .funnel-bar-inner { height: 36px; border-radius: 6px; display: flex; align-items: center; padding: 0 12px; font-size: 12px; font-weight: 700; color: #ffffff; transition: width .4s ease-in-out;}
-  .funnel-label { font-size: 13px; font-weight: 600; color: var(--color-text-secondary); min-width: 150px; }
+  .funnel-label { font-size: 13px; font-weight: 600; color: var(--color-text-secondary); width: 220px; flex-shrink: 0; }
   .funnel-count { font-size: 12px; font-weight: 600; color: var(--color-text-tertiary); min-width: 80px; text-align: right; }
+
+  .funnel-row-eros .funnel-bar-inner {
+    background: linear-gradient(90deg, var(--color-brand-primary), #60fa93) !important;
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+    animation: pulse-glow 2s infinite ease-in-out;
+  }
+  .funnel-row-eros .funnel-label { color: var(--color-brand-primary); font-weight: 800; }
+  
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 10px rgba(37, 99, 235, 0.3); }
+    50% { box-shadow: 0 0 20px rgba(37, 99, 235, 0.6); }
+  }
 
   .funnel-list { display: flex; flex-direction: column; margin-top: 2rem; }
   .funnel-row-item { display: flex; padding: 2rem 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
@@ -326,6 +338,60 @@
     <p>Most hiring funnels are elimination machines. Ours is a signal amplifier. Automation protects human bandwidth — so by the time a senior engineer sits across from a candidate, the conversation is never about syntax. It is about judgment. Stages 3, 4, and 5 below form the technical evaluation core. They are specified in full detail in the next section.</p>
 
     <div class="funnel-vis" id="funnelVis"></div>
+
+<style>
+  .metrics-dashboard-table { width: 100%; border-collapse: collapse; margin-top: 2rem; font-size: 13px; border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); overflow: hidden; }
+  .metrics-dashboard-table th { background: var(--color-brand-dark); color: white; text-align: left; padding: 10px 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 11px; }
+  .metrics-dashboard-table td { padding: 12px 14px; border-bottom: 1px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-weight: 500; }
+  .metrics-dashboard-table tr:last-child td { border-bottom: none; }
+  .metrics-tag { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: inline-block; }
+  .tag-pass { background: #E6F4EA; color: #137333; }
+  .tag-fail { background: #FCE8E6; color: #C5221F; }
+  .tag-noise { background: #FEF7E0; color: #B06000; }
+</style>
+
+<table class="metrics-dashboard-table">
+  <thead>
+    <tr>
+      <th>Funnel Trajectory Stage</th>
+      <th>Conversion Pass Rate</th>
+      <th>Programmatic Attrition</th>
+      <th>Target Error Budget (Noise)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>01 · Algorithmic Trajectory Screen</strong></td>
+      <td><span class="metrics-tag tag-pass">55.0%</span> Move to Baseline</td>
+      <td><span class="metrics-tag tag-fail">45.0%</span> Profile Mismatch</td>
+      <td><span class="metrics-tag tag-noise">&lt; 2.5%</span> Resume Keyword Gaming</td>
+    </tr>
+    <tr>
+      <td><strong>02 · Communication Baseline</strong></td>
+      <td><span class="metrics-tag tag-pass">36.3%</span> Move to Written</td>
+      <td><span class="metrics-tag tag-fail">63.7%</span> Tone / Fluency Deficit</td>
+      <td><span class="metrics-tag tag-noise">&lt; 1.0%</span> Audio Environment Artifacts</td>
+    </tr>
+    <tr>
+      <td><strong>03 · Written Diagnostic & Direction Screen</strong></td>
+      <td><span class="metrics-tag tag-pass">40.0%</span> Move to Sandbox</td>
+      <td><span class="metrics-tag tag-fail">60.0%</span> Decomposition Failure</td>
+      <td><span class="metrics-tag tag-noise">&lt; 4.0%</span> Plausible-Sounding AI Prose</td>
+    </tr>
+    <tr>
+      <td><strong>04 · Guarded Sandbox</strong></td>
+      <td><span class="metrics-tag tag-pass">50.0%</span> Move to Live Defense</td>
+      <td><span class="metrics-tag tag-fail">50.0%</span> Concurrency / State Leak</td>
+      <td><span class="metrics-tag tag-noise">&lt; 1.5%</span> Blind AI Template Acceptance</td>
+    </tr>
+    <tr>
+      <td><strong>05 · Live System Defense</strong></td>
+      <td><span class="metrics-tag tag-pass">25.0%</span> Pushed to Eros Engine</td>
+      <td><span class="metrics-tag tag-fail">75.0%</span> Constraint Collapse</td>
+      <td><span class="metrics-tag tag-noise">&lt; 0.5%</span> Interviewer Subjectivity Drift</td>
+    </tr>
+  </tbody>
+</table>
 
     <div class="funnel-list">
       <div class="funnel-row-item">
@@ -1382,12 +1448,21 @@ Result: Cosine Similarity 0.942 -> "Top Decile Alignment"</div>
       </div>
     </div>
 
-    <div style="display:flex; padding:2rem 0;">
+    <div style="display:flex; padding:2rem 0; border-bottom:0.5px solid var(--color-border-tertiary);">
       <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">05</div>
       <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
         <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">External Expert Calibration</div>
         <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">Internal reviewers develop blind spots. Every six months, a panel of three to five external senior engineers — sourced from Proxify client companies and academic institutions with assessment expertise — reviews a sample of fifty scored responses across all tracks. They score the responses independently against the same rubric and their scores are compared against the internal baseline. Divergences above 15% on any dimension trigger a rubric review. For the data and AI track specifically, we engage an external ML practitioner to validate that the broken code problems reflect real production failure patterns, not academic exercises. For the predictive validity model, we engage a statistician to review the JPS formula and correlation methodology annually.</div>
         <div style="font-size:13px; color:var(--color-text-tertiary); font-style:italic; line-height:1.7;">Signal: External review is not optional — it is the check on the check. Internal calibration maintains consistency. External calibration maintains accuracy.</div>
+      </div>
+    </div>
+
+    <div style="display:flex; padding:2rem 0;">
+      <div style="font-size:48px; font-weight:300; color:var(--color-text-tertiary); width:80px; flex-shrink:0; line-height:1;">06</div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:16px; font-weight:500; color:var(--color-text-primary);">Systemic Process Redesign Triggers</div>
+        <div style="font-size:14px; color:var(--color-text-secondary); line-height:1.7;">When a track's mathematical weight variance fails to stabilize, or when downstream client satisfaction reports flag performance churn, numbers alone are insufficient. If a track's Pearson correlation drops below r = 0.35, or if client-side placement rejections spike past 15% within a single quarter, the system declares a structural assessment breach. This trigger bypasses standard weight recalculation and mandates a clean-slate overhaul of the sandbox environment, an absolute rotation of the core codebase vulnerabilities, and a complete re-engineering of the live interview constraints to align back with evolving production conditions.</div>
+        <div style="font-size:13px; color:var(--color-text-tertiary); font-style:italic; line-height:1.7;">Signal: Client rejections are the ultimate verification constraint. If the funnel scores match on paper but fail in client teams, the process is structurally compromised and a clean-slate rebuild fires automatically.</div>
       </div>
     </div>
   </section>
@@ -1506,17 +1581,19 @@ function switchTrack(trackId, element) {
 const funnelStages = [
   { label: '01 · Algorithmic Trajectory Screen', pct: 100, count: '150,000+' },
   { label: '02 · Communication Baseline', pct: 55, count: '82,500' },
-  { label: '03 · Written Diagnostic & Direction Screen', pct: 20, count: '30,000' },
+  { label: '03 · Written Diagnostic', pct: 20, count: '30,000' },
   { label: '04 · Guarded Sandbox', pct: 8, count: '12,000' },
   { label: '05 · Live System Defense', pct: 4, count: '6,000' },
-  { label: 'Eros Vetting Vector', pct: 1.5, count: 'Top 1%' },
+  { label: '=> Eros Vetting Vector', pct: 1.5, count: 'Top 1%' },
 ];
 const vis = document.getElementById('funnelVis');
 if(vis) {
   funnelStages.forEach(s => {
     const row = document.createElement('div');
-    row.className = 'funnel-row';
-    row.innerHTML = `<span class="funnel-label">${s.label}</span><div class="funnel-bar-wrap"><div class="funnel-bar-inner" style="width:${Math.max(s.pct, 8)}%;background:var(--color-brand-primary)">${s.pct}%</div></div><span class="funnel-count">${s.count}</span>`;
+    const isEros = s.label.includes('Eros');
+    row.className = 'funnel-row' + (isEros ? ' funnel-row-eros' : '');
+    const minWidth = isEros ? 6 : 7; // Eros bar slightly shorter than the 4% bar (which uses 8%)
+    row.innerHTML = `<span class="funnel-label">${s.label}</span><div class="funnel-bar-wrap"><div class="funnel-bar-inner" style="width:${Math.max(s.pct, minWidth)}%;background:var(--color-brand-primary)">${s.pct}%</div></div><span class="funnel-count">${s.count}</span>`;
     vis.appendChild(row);
   });
 }
