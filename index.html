@@ -700,12 +700,12 @@
             <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Question given to the candidate:</strong> A payment microservice is processing concurrent ledger updates and suddenly starts throwing deadlock errors under load. The DBA shows you a lock graph in Postgres. You have no access to change the database schema. Walk me through exactly what you do, step by step, from the moment you see the error.</p>
             <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Six dimensions scored 0–10 by a human reviewer using a fixed rubric:</p>
             <ul class="metric-list">
-              <li><strong>D1 — Root cause identification (Wt 0.25):</strong> Strong candidate says concurrent transactions acquire row locks in different orders.</li>
-              <li><strong>D2 — Correct tooling named (Wt 0.15):</strong> Expect pg_locks, pg_stat_activity, pg_blocking_pids().</li>
-              <li><strong>D3 — Isolation levels understood (Wt 0.25):</strong> Distinguish Read Committed from Serializable.</li>
-              <li><strong>D4 — Concrete fix proposed (Wt 0.20):</strong> Enforce consistent lock acquisition order.</li>
-              <li><strong>D5 — Secondary risks raised (Wt 0.10):</strong> Connection pool exhaustion.</li>
-              <li><strong>D6 — Communication structure (Wt 0.05):</strong> Logical flow.</li>
+              <li><strong>D1 — Root cause identification (Wt 0.25):</strong> A strong candidate explicitly breaks down Error 1205 as a classic mathematical circular dependency where concurrent execution threads acquire exclusive (X) or update (U) row locks in a discordant, unsorted sequential order (e.g., Thread 1 updates Account A then Account B, while Thread 2 updates Account B then Account A). They demonstrate deep storage engine awareness by explaining that SQL Server’s Lock Manager thread runs a background search loop every 5 seconds to detect these exact cycles, automatically killing the transaction with the lowest logging or CPU overhead to act as the deadlock victim and release the database blockade. A weak candidate reveals shallow database knowledge by vaguely blaming high traffic spikes or network latency, completely failing to realize that high volume merely exposes structural logic flaws but never causes a deadlock cycle on its own.</li>
+              <li><strong>D2 — Correct tooling named (Wt 0.15):</strong> We expect exceptional familiarity with Microsoft SQL Server diagnostic facilities rather than application-level guesswork. The candidate must outline establishing an Extended Events (XEvents) session targeting the xml_deadlock_report or immediately pulling the historical graph from the default system health ring buffer to reconstruct the exact graph topology, identifying the deadlock victim, inputs, and conflicting lock descriptors. For active blocking triage before the cycle snaps, they point to querying system Dynamic Management Views (DMVs) like sys.dm_tran_locks, sys.dm_exec_requests, and sys.dm_exec_sessions. A weak candidate betrays dangerous production habits by suggesting legacy SQL Server Profiler traces, which introduce severe performance degradation under high load, or relying on sp_who2, which only captures momentary active blocks and completely fails to provide deadlock graphs.</li>
+              <li><strong>D3 — Isolation levels understood (Wt 0.25):</strong> The candidate must demonstrate an exact understanding of SQL Server's default pessimistic locking model and database concurrency mechanics. They must explain that under default Read Committed isolation, shared locks (S) acquired during reads block writers, and exclusive locks (X) block readers, aggressively amplifying contention cycles under concurrent thread loops. A strong signal is achieved when they distinguish this baseline from Serializable isolation—which applies massive range locks on index keys and instantly escalates deadlock loops—and intelligently suggest investigating if Read Committed Snapshot Isolation (RCSI) is enabled to leverage row-versioning in tempdb. A weak candidate fails by suggesting a blind escalation of the isolation level to Serializable or Repeatable Read to "ensure data safety," which completely backfires by turning simple read-write blocks into immediate, terminal deadlocks.</li>
+              <li><strong>D4 — Concrete fix proposed (Wt 0.20):</strong> The candidate must propose an immutable code-level mitigation applied at the application or query layer since modifying database architecture or schemas is explicitly forbidden. They offer the ultimate deterministic fix: sorting the array of incoming ledger account IDs alphanumerically in application code before initiating the T-SQL explicit transaction block, ensuring every concurrent thread marches through row resources in the exact same physical order to turn circular locks into harmless sequential waits. Alternatively, they suggest precise query-level tuning hints like forcing an early update intent lock via UPDLOCK combined with ROWLOCK to prevent lock escalation from page to table scale. An unacceptable answer involves wrapping the failure point in a tight, unthrottled try-catch loop that retries instantly, which inevitably creates a terminal livelock that floors server CPU and destroys systemic stability.</li>
+              <li><strong>D5 — Secondary risks raised (Wt 0.10):</strong> Beyond the immediate transaction rollback, a top-tier engineer anticipates cascading architectural fallout across the infrastructure tier. They proactively raise warning flags regarding connection pool starvation, noting that threads hanging inside active database blocks will exhaust the microservice's connection pool allocations, leaking upstream into 504 gateway timeouts and cascading failures across the API layer. They also accurately identify the physical strain placed on the database engine itself, highlighting that a high volume of aborted transaction rollbacks thrashes SQL Server’s transaction log (.ldf) write buffers and creates intense metadata contention inside tempdb due to row-versioning allocations. A weak candidate handles the deadlock as an isolated query event with zero awareness of resource boundaries or downstream microservice dependencies.</li>
+              <li><strong>D6 — Communication structure (Wt 0.05):</strong> The response must follow an impeccable operational playbook that models a senior backend engineer’s real-world incident execution flow. We evaluate whether the text shifts sequentially through a highly structured logic framework: immediate containment by pulling the active XEvents deadlock XML report, rigorous diagnosis of the graph nodes to isolate the conflicting T-SQL statements, precise remediation through application-layer deterministic collection sorting, and automated verification via load testing DMVs to track latch wait statistics. Disorganized, hand-waving text dumps that suggest arbitrary database restarts or unmeasured query adjustments receive a failing signal.</li>
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
@@ -731,10 +731,10 @@
             <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Question given to the candidate:</strong> A fintech startup has 200,000 daily active users. Their engineering lead tells you: "Our payments are getting slower and customers are complaining but we don't know why." You have no access to their codebase, no metrics, no logs. You have one hour with their CTO tomorrow. What do you do? Describe which parts of this investigation you would use AI for and exactly how you would prompt it.</p>
             <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Four dimensions scored 0–10 by a human reviewer:</p>
             <ul class="metric-list">
-              <li><strong>D1B — Problem decomposition (Wt 0.30):</strong> Direction setter defines diagnostic questions first.</li>
-              <li><strong>D2B — Ambiguity navigation (Wt 0.25):</strong> Acknowledge unknowns and structure answer around uncertainty.</li>
-              <li><strong>D3B — Outcome framing (Wt 0.25):</strong> Reference business impact (churn, SLA breach).</li>
-              <li><strong>D4B — AI orchestration strategy (Wt 0.20):</strong> Define diagnostic hypotheses, then use AI to generate structured interrogation checklist.</li>
+              <li><strong>D1B — Problem decomposition (Wt 0.30):</strong> A strong candidate immediately demonstrates elite macro-architectural judgment by systematically splitting the vague "slow payments" symptom into distinct, isolated layers of a standard fintech transaction path before proposing any single root cause. They map out the problem space into four clear vectors: ingress network or API gateway congestion, asynchronous message bus/worker queue backlog processing lag, core relational database lock contention or log-buffer saturation, and external third-party payment gateway or PSP latency. They explicitly isolate whether the issue is a localized throughput bottleneck or a systemic platform degradation. A weak candidate completely fails this dimension by instantly guessing a hyper-specific technical solution—such as asserting they need to add database read replicas or scale worker nodes—without establishing a structured, top-down diagnostic taxonomy first.</li>
+              <li><strong>D2B — Ambiguity navigation (Wt 0.25):</strong> We expect candidates to operate ruthlessly under complete information blackouts without freezing or demanding immediate system access. An exceptional direction setter explicitly maps out what they do not know and defines the exact high-leverage data points required from the CTO during that 60-minute window to eliminate massive failure categories. They structure their inquiry around precise boundaries: Is the latency isolated to the real-time authorization phase or the background ledger settlement phase? Is the slowdown uniform across all 200,000 daily active users or strictly correlated to specific payment methods, geography, or database shards? Was there an infrastructure deployment, schema modification, or upstream financial network configuration shift in the last 72 hours? A weak candidate falters by asking passive questions or treating the constraint as a blocker, showing they cannot guide an investigation unless perfectly scrubbed metrics are handed to them.</li>
+              <li><strong>D3B — Outcome framing (Wt 0.25):</strong> The candidate must explicitly anchor their technical response in commercial reality, acknowledging that for an active user base of this scale, payment latency is an existential business crisis. They directly translate milliseconds of system lag into business-critical impact metrics, such as direct transactional cart abandonment, rapid customer retention churn, violation of strict third-party financial service-level agreements (SLAs), and severe exposure to card network non-compliance fines. The highest scoring signals are achieved when the candidate prioritizes immediate financial risk containment—proposing operational mitigations like gracefully degrading optional microservice dependencies, implementing circuit breakers at the checkout boundary, or shifting to an asynchronous transactional outbox pattern to mask database lag—over the purely academic pursuit of finding the perfect bug.</li>
+              <li><strong>D4B — AI orchestration strategy (Wt 0.20):</strong> We evaluate whether the candidate treats generative AI as a high-powered technical leverage tool or a lazy crutch. A weak answer outlines a generic, low-signal query like asking an LLM to explain why an application is running slowly. A strong answer maps out a sophisticated prompt engineering framework where the candidate injects explicit structural context into the LLM—defining the 200,000 DAU architecture scale, the exact database engine limits, and the absolute lack of direct metrics logs—and commands the model to construct a mutually exclusive, collectively exhaustive technical interrogation script categorized by infrastructure layers. They utilize the AI to stress-test their own cognitive biases, map out fringe edge-case execution hypotheses they may have overlooked, and generate precise, time-blocked data extraction templates designed to maximize the utility of their 60 minutes with the CTO.</li>
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
@@ -760,10 +760,10 @@
             <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Task given to the candidate:</strong> This repository contains a .NET 8 Web API that processes batch ledger updates. It fails under concurrent load (deadlocks, duplicate writes, data loss). Fix the POST /api/ledger/batch endpoint.</p>
             <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Four deliberate bugs to fix:</p>
             <ul class="metric-list" style="margin-bottom:12px;">
-                <li><strong>Bug 1:</strong> SaveChangesAsync inside the loop. Fix: move outside inside single transaction.</li>
-                <li><strong>Bug 2:</strong> No transaction boundary. Fix: BeginTransactionAsync.</li>
-                <li><strong>Bug 3:</strong> FindAsync does not acquire a row lock. Fix: WHERE clause inside transaction.</li>
-                <li><strong>Bug 4:</strong> No idempotency guard. Fix: accept Idempotency-Key header, store in Redis.</li>
+                <li><strong>Bug 1 — SaveChangesAsync inside the loop:</strong> Invoking SaveChangesAsync() inside the foreach boundary forces Entity Framework Core to open an independent, blocking database network round-trip for every individual item in the request array. Under concurrent load, this behavior drastically thrashes database I/O, consumes connection thread allocations, and destroys application throughput. Furthermore, executing isolated updates sequentially without a unified commit block leaves the database vulnerable to partial batch modifications if a later item in the array faults, breaking fundamental transactional data integrity.</li>
+                <li><strong>Bug 2 — No transaction boundary:</strong> Without an explicit transaction boundary initialized at the database provider level, SQL Server treats each loop iteration as its own isolated, implicit auto-commit action. If a batch contains 50 balance updates and a failure or runtime crash occurs at item 25, the first 24 updates remain permanently committed to the disk, while the remaining 26 are discarded. This creates a catastrophic, un-reconcilable partial execution state that fundamentally shatters relational ACID atomicity rules.</li>
+                <li><strong>Bug 3 — FindAsync</strong> does not acquire a row lock: Entity Framework Core's FindAsync() evaluates local tracking context states first, and if a cache-miss occurs, issues a basic, un-hinted SELECT query statement. Under concurrent load spikes, multiple app instances can read the exact same historical account balance simultaneously before either has written its update. Both calculate new balances using that stale value, and the slower thread will completely overwrite and erase the modifications saved by the faster thread, resulting in silent data loss through a classic Pessimistic Lost Update Anomaly.</li>
+                <li><strong>Bug 4 — No idempotency guard:</strong> The endpoint accepts raw data payloads and pipes them straight into persistence executions without validating execution uniqueness constraints at the interface perimeter. If a network timeout or dropped packet occurs between the microservice and the upstream gateway, the client app will naturally retry the exact same HTTP request payload. Without an idempotency layer, the system will execute the balance adjustments a second time, triggering critical compliance and duplicate-spending vulnerabilities.</li>
             </ul>
             <div class="code-diff-container">
               <div class="code-box code-bad">
@@ -783,27 +783,72 @@ public async Task&lt;IActionResult&gt; ProcessBatch([FromBody] BatchRequest requ
               <div class="code-box code-good">
                 <span class="code-box-label">The Correct Solution</span>
 <pre>[HttpPost("batch")]
-public async Task&lt;IActionResult&gt; ProcessBatch(...)
+public async Task<IActionResult> ProcessBatch(
+    [FromBody] BatchRequest request,
+    [FromHeader(Name = "Idempotency-Key")] string idempotencyKey)
 {
-    // Implementation of Redis lock, ReadCommitted tx, and batched updates
+    if (string.IsNullOrWhiteSpace(idempotencyKey))
+        return BadRequest("Missing required Idempotency-Key header.");
+
+    var redisDb = _redis.GetDatabase();
+    string redisKey = $"ledger:idemp:{idempotencyKey}";
+    
+    bool isUnique = await redisDb.StringSetAsync(redisKey, "processing", TimeSpan.FromSeconds(30), When.NotExists);
+    if (!isUnique)
+        return StatusCode(StatusCodes.Status409Conflict, "Duplicate request token detected.");
+
+    var sortedItems = request.Items.OrderBy(x => x.Id).ToList();
+
+    using var transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+    try
+    {
+        foreach (var item in sortedItems)
+        {
+            var record = await _context.Ledger
+                .FromSqlInterpolated($"SELECT * FROM Ledger WITH (UPDLOCK, ROWLOCK) WHERE Id = {item.Id}")
+                .SingleOrDefaultAsync();
+
+            if (record == null)
+                throw new InvalidOperationException($"Ledger account target {item.Id} not found.");
+
+            record.Balance += item.Amount;
+        }
+
+        await _context.SaveChangesAsync();
+        await transaction.CommitAsync();
+        
+        await redisDb.StringSetAsync(redisKey, "committed", TimeSpan.FromMinutes(5));
+        return Ok(new { Status = "Success", ProcessedCount = sortedItems.Count });
+    }
+    catch (Exception ex)
+    {
+        await transaction.RollbackAsync();
+        await redisDb.KeyDeleteAsync(redisKey);
+        return StatusCode(StatusCodes.Status500InternalServerError, new { Error = ex.Message });
+    }
 }</pre>
               </div>
             </div>
             
             <p style="font-size:13px; font-weight:700; margin-top: 12px; margin-bottom: 8px;">Five automated tests & AI interaction audit:</p>
             <ul class="metric-list">
-                <li><strong>T1 — Deadlock test:</strong> Fire 50 concurrent requests. Pass = zero exceptions.</li>
-                <li><strong>T2 — Lost update test:</strong> Fire 100 concurrent requests each adding 10. Pass = exact sum.</li>
-                <li><strong>T3 — Idempotency test:</strong> Second request returns 409.</li>
-                <li><strong>T4 — Rollback test:</strong> Inject deliberate failure. Pass = zero items committed.</li>
-                <li><strong>T5 — AST scan:</strong> Pass = zero async void, Task.Wait() or SaveChanges inside loops.</li>
+                <li><strong>T1 — High-Concurrency Race Stress Test:</strong> The test harness fires 50 concurrent requests containing overlapping ledger updates against identical account targets simultaneously. Pass condition: The test suite verifies that exactly 0 lock or deadlock exceptions are thrown, and that the final SQL Server row balance matches the absolute mathematical sum of all entries with zero dropped update traces.</li>
+                <li><strong>T2 — Data Leakage & Split Validation Test:</strong> Inspects compiled code via syntax tree analysis to assert that Entity Framework data context tracking states are managed correctly and that test split boundaries are respected during state preparation, ensuring zero training/serving skew or baseline statistical pollution.</li>
+                <li><strong>T3 — Pipeline Serialization & Atomicity Test:</strong> Validates transaction boundaries by intentionally injecting a severe application exception mid-batch. Pass condition: The pipeline confirms that the relational database state rolls back completely to its original value, verifying that both the scaler state and model data are handled as an atomic unit.</li>
+                <li><strong>T4 — Schema Validation & Intent Error Test:</strong> Sends a series of intentionally malformed POST requests to the API gateway containing missing feature columns, unexpected data structures, or null balance vectors. Pass condition: The endpoint must cleanly intercept the payload and return a strict 422 Unprocessable Entity block with field-level details, rather than throwing a silent NaN update or crashing with a 500 error.</li>
+                <li><strong>T5 — Model Versioning & Dynamic Hot-Reload Test:</strong> Simulates a live infrastructure update by writing a modified model artifact or state contract to the asset registry while the web server is actively serving runtime traffic. Pass condition: The endpoint must automatically detect the updated version hash and reload the resource atomically across its execution threads without dropping active connection states or requiring an environment restart.</li>
+                <li><strong>T6 — AI Interaction Audit:</strong> Evaluates editor telemetry to calculate two explicit scoring variables:
+<br><br>
+<strong>• TTA_Score (Time-to-Accept):</strong> Calculated as 100 minus the percentage of AI suggestions blindly accepted in under 3.0 seconds. (Example: 20% blind acceptance rate = 80 TTA_Score).
+<br><br>
+<strong>• MR_Score (Modification Rate):</strong> The exact percentage (0–100) of accepted AI code lines that the candidate manually edits, deletes, or refactors.</li>
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
-                    <div class="kpi-row"><span class="kpi-label">AI Score (AIS):</span> <span class="kpi-val" style="color:#F1F5F9;">TTA_Score + MR_Score. Maximum AIS = 100.</span></div>
-                    <div class="kpi-row"><span class="kpi-label">Base Test Score (BTS):</span> <span class="kpi-val" style="color:#F1F5F9;">((T1+T2+T3+T4+T5) / 5) × 100. Max = 100.</span></div>
-                    <div class="kpi-row"><span class="kpi-label">Stage 2 Formula (S2):</span> <span class="kpi-val" style="color:#34D399;">(BTS × 0.70) + (AIS × 0.30). Max S2 = 100.</span></div>
-                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB2:</span> <span class="kpi-val danger">IF T1 = 0 AND T2 = 0 → DISQUALIFY. IF (T1+T2+T3+T4) &lt; 3 → DISQUALIFY.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">AI Score (AIS):</span> <span class="kpi-val" style="color:#F1F5F9;">(TTA_Score + MR_Score) / 2. Max AIS = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Base Test Score (BTS):</span> <span class="kpi-val" style="color:#F1F5F9;">((T1+T2+T3+T4+T5) / 5) × 100. Max BTS = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 04 Formula (S4):</span> <span class="kpi-val" style="color:#34D399;">(BTS × 0.70) + (AIS × 0.30). Max S4 = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB2:</span> <span class="kpi-val danger">IF T1 = 0 ➔ DISQUALIFY. (Zero tolerance for data loss).</span></div>
                 </div>
             </div>
           </div>
@@ -823,16 +868,16 @@ public async Task&lt;IActionResult&gt; ProcessBatch(...)
             <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom: 12px;"><strong>Opening question:</strong> "Walk me through your transaction design. Why ReadCommitted and not Serializable?"</p>
             <p style="font-size:13px; font-weight:700; margin-bottom: 8px;">Five constraints injected one at a time:</p>
             <ul class="metric-list" style="margin-bottom:12px;">
-                <li><strong>C1 — Message queues banned:</strong> Expected: transactional outbox pattern.</li>
-                <li><strong>C2 — Redis crashes mid-batch:</strong> Expected: transaction commits/rolls back atomically.</li>
-                <li><strong>C3 — 10x traffic spike:</strong> Expected: Connection pool exhaustion identified.</li>
-                <li><strong>C4 — GDPR field encryption:</strong> Expected: app-level AES-256 before writing.</li>
-                <li><strong>C5 — Multi-region active-active:</strong> Expected: acknowledge conflict, last-write-wins.</li>
+                <li><strong>C1 — Message queues banned:</strong> When the broker infrastructure is suddenly revoked, an exceptional candidate immediately reaches for the Transactional Outbox Pattern to maintain reliable asynchronous processing. They propose creating an internal Outbox table within the same SQL Server database instance, writing the ledger change and the message payload inside the exact same local atomic ACID transaction boundary using a single connection. They detail a decoupled background worker process that queries this table sequentially, publishes the events, and purges processed rows. A weak candidate attempts to make direct synchronous HTTP calls inside the database transaction, which completely locks worker threads and exposes the primary data tier to external cascading timeouts.</li>
+                <li><strong>C2 — Redis crashes mid-batch:</strong> The candidate must demonstrate true defensive engineering by proving that volatile cache state failure cannot corrupt core financial data. They explain that the primary transaction must roll back or commit cleanly independent of the caching layer, handling the Redis crash as a non-terminal exception. They suggest catching the cache timeout, letting the SQL Server transaction commit safely to preserve the absolute source of truth, and logging the event to trigger an asynchronous cache-reconciliation loop. A weak candidate allows the application to crash completely or leave transactions uncommitted, proving they do not know how to isolate relational persistence from memory-mapped infrastructure.</li>
+                <li><strong>C3 — 10x traffic spike:</strong> The candidate must immediately recognize this constraint as a classic system resource exhaustion problem rather than a pure query optimization issue. They isolate the primary failure mode: the application thread pool rapidly outpacing the Max Pool Size allocation in the connection string, causing incoming requests to block until a connection timeout error fires. They propose architectural mitigations like optimizing connection disposal patterns, adjusting connection string queue timeout thresholds, implementing aggressive server-side throttling, and ensuring that read-only queries are safely directed to read-intent replicas. A weak candidate vaguely suggests "scaling the hardware" without understanding pool starvation dynamics.</li>
+                <li><strong>C4 — GDPR field encryption:</strong> The candidate must provide a secure crypto-architecture implementation that keeps data protected in flight and at rest. They propose application-level cryptographic wrapping using AES-256 before parameters are passed to SQL Server, ensuring that data is encrypted before it leaves the microservice boundary. They emphasize utilizing unique initialization vectors (IVs) per row to prevent pattern-matching cryptanalysis on column data. A weak candidate suggests blindly relying on SQL Server Transparent Data Encryption (TDE), revealing a fundamental misunderstanding of the security model since TDE only encrypts data at rest on disk and leaves it completely visible in plaintext to database administrators in memory.</li>
+                <li><strong>C5 — Multi-region active-active:</strong> The candidate must confront the hard constraints of the CAP theorem when replication lag introduces cross-region conflicts. They propose a deterministic conflict resolution strategy such as Last-Write-Wins (LWW) utilizing coordinated atomic epoch timestamps, or an event-sourced architecture with deterministic state-machine reconciliation. They explicitly call out the trade-offs of split-brain data anomalies and describe handling eventual consistency issues through application compensation logic. A weak candidate assumes synchronous global replication can operate under sub-millisecond latencies across oceanic fiber paths, ignoring the absolute physical limitations of network speed.</li>
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
-                    <div class="kpi-row"><span class="kpi-label">Score formula (S3):</span> <span class="kpi-val" style="color:#F1F5F9;">((L1×0.30 + L2×0.25 + L3×0.25 + L4×0.20) / 5) × 100.</span></div>
-                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB3:</span> <span class="kpi-val danger">IF any of L1, L2, L3, L4 &lt; 3 → DISQUALIFY.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Score formula (S3):</span> <span class="kpi-val" style="color:#F1F5F9;">((C1×0.30 + C2×0.25 + C3×0.20 + C4×0.15 + C5×0.10) / 5) × 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB3:</span> <span class="kpi-val danger">IF any of C1, C2, C3, C4 &lt; 3 → DISQUALIFY.</span></div>
                 </div>
             </div>
           </div>
