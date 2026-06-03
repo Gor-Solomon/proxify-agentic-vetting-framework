@@ -273,7 +273,6 @@
     </div>
   </div>
 
-  <!-- SECTION 1 -->
   <section id="s1">
     <div class="section-tag">01 · Problem framing</div>
     <div class="section-title">The Core Problem: Syntax is Dead</div>
@@ -297,7 +296,6 @@
     <p style="margin-top: 2rem; font-size:14px; color:var(--color-text-secondary); line-height:1.7;">One final note before the proposal begins. A system this detailed is only valuable if it can be implemented. The rollout sequence matters as much as the design. In the first 90 days: deploy Stage 1 written screens and Stage 2 sandbox for two tracks — Backend and Full-Stack — to establish baseline data while keeping live defense capacity manageable. In months three to six: add remaining tracks, begin collecting 90-day JPS from placed candidates, run first inter-rater calibration session. At six months: first quarterly refit of stage weights based on Pearson correlation data. The system reaches full operational confidence — all tracks, all stages, calibrated weights, validated circuit breakers — at approximately 12 months. Stakeholders who need to be aligned before launch: VP Assessment for rubric sign-off, Head of Talent Acquisition for stage sequencing integration with ATS, RnD leads per track for sandbox problem validation, and at least one client-side senior engineer per track for external content review.</p>
   </section>
 
-  <!-- SECTION 2 -->
   <section id="s2">
     <div class="section-tag">02 · Framework Definition</div>
     <div class="section-title">The 6 Dimensions of Engineering Excellence</div>
@@ -358,7 +356,6 @@
     </div>
   </section>
 
-  <!-- SECTION 3 -->
   <section id="s3">
     <div class="section-tag">03 · Funnel Design</div>
     <div class="section-title">The 5-Stage Vetting Pipeline</div>
@@ -459,7 +456,6 @@
     </div>
   </section>
 
-  <!-- SECTION 4: THE TECHNICAL TRACK MATRICES -->
   <section id="s4">
     <div class="section-tag">04 · Technical Depth</div>
     <div class="section-title">The Technical Track Matrices</div>
@@ -473,15 +469,11 @@
       <div class="track-badge" onclick="switchTrack('track-data-ai', this)">5. Data & AI</div>
     </div>
 
-    <!-- ==============================================
-         TRACK 1: FRONTEND EXPERT (4-STAGE SPEC)
-         ============================================== -->
     <div id="track-frontend" class="track-content active">
       <h3 style="margin-top: 0; color: var(--color-brand-dark);">Frontend Expert: The Full Lifecycle Pipeline</h3>
       <p>Measurement Target: React reconciliation, rendering pipelines, ambiguity navigation, and main-thread execution performance. <em>Technology Selection: Default to React; Next.js accepted as a bonus signal for SSR/hydration evaluation.</em></p>
       
       <div class="step-card-grid">
-        <!-- S1 (Open Default) -->
         <div class="step-pane open">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -504,7 +496,7 @@
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
-                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1 = (D1×0.25 + D2×0.15 + D3×0.25 + D4×0.20 + D5×0.10 + D6×0.05) × 10. Max S1 = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 03A Formula (S03A):</span> <span class="kpi-val" style="color:#F1F5F9;">(D1×0.25 + D2×0.15 + D3×0.25 + D4×0.20 + D5×0.10 + D6×0.05) × 10. Max S03A = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1:</span> <span class="kpi-val danger">IF D3 &lt; 7 OR D4 &lt; 7 → DISQUALIFY. Do not proceed to Stage 1B.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">Total 42 out of 60 or higher. D3 and D4 must each be 7 or above.</span></div>
                 </div>
@@ -512,7 +504,6 @@
           </div>
         </div>
 
-        <!-- S1B -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -533,7 +524,7 @@
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
-                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1B = (D1B×0.30 + D2B×0.25 + D3B×0.25 + D4B×0.20) × 10. Max S1B = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 03B Formula (S03B):</span> <span class="kpi-val" style="color:#F1F5F9;">(D1B×0.30 + D2B×0.25 + D3B×0.25 + D4B×0.20) × 10. Max S03B = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1B:</span> <span class="kpi-val danger">IF D3B &lt; 5 AND D1B &lt; 5 → DISQUALIFY.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">Total 60 out of 100 or higher. D4B must be 5 or above.</span></div>
                 </div>
@@ -541,7 +532,6 @@
           </div>
         </div>
 
-        <!-- S2 -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -604,7 +594,7 @@
                 <div class="kpi-grid">
                     <div class="kpi-row"><span class="kpi-label">AI Score (AIS):</span> <span class="kpi-val" style="color:#F1F5F9;">TTA_Score + MR_Score. Maximum AIS = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Base Test Score (BTS):</span> <span class="kpi-val" style="color:#F1F5F9;">((T1+T2+T3+T4+T5) / 5) × 100. Max = 100.</span></div>
-                    <div class="kpi-row"><span class="kpi-label">Stage 2 Formula (S2):</span> <span class="kpi-val" style="color:#34D399;">(BTS × 0.70) + (AIS × 0.30). Max S2 = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 04 Formula (S04):</span> <span class="kpi-val" style="color:#34D399;">(BTS × 0.70) + (AIS × 0.30). Max S04 = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB2:</span> <span class="kpi-val danger">IF T1 = 0 AND T2 = 0 → DISQUALIFY. IF (T1+T2+T3+T4) &lt; 3 → DISQUALIFY.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">T1, T2, T3, T4 must all pass. T5 clean. T6 reviewed by human.</span></div>
                 </div>
@@ -612,7 +602,6 @@
           </div>
         </div>
 
-        <!-- S3 -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -641,7 +630,7 @@
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
-                    <div class="kpi-row"><span class="kpi-label">Score formula (S3):</span> <span class="kpi-val" style="color:#F1F5F9;">((L1×0.30 + L2×0.25 + L3×0.25 + L4×0.20) / 5) × 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 05 Formula (S05):</span> <span class="kpi-val" style="color:#F1F5F9;">((L1×0.30 + L2×0.25 + L3×0.25 + L4×0.20) / 5) × 100. Max S05 = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB3:</span> <span class="kpi-val danger">IF any of L1, L2, L3, L4 &lt; 3 → DISQUALIFY.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">No score below 3. Total 16 out of 20 or higher.</span></div>
                 </div>
@@ -649,7 +638,6 @@
           </div>
         </div>
 
-        <!-- SCORING MODEL (Collapsed by default) -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -660,7 +648,7 @@
           </div>
           <div class="step-pane-body" style="background: var(--color-background-secondary); border-top: none;">
               <h4 style="color: var(--color-brand-dark); margin-top: 0; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid #CBD5E1; padding-bottom:8px; margin-bottom:12px;">Final Composite Score</h4>
-              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A; margin-bottom: 8px;">F = (S1 × 0.15) + (S1B × 0.15) + (S2 × 0.40) + (S3 × 0.30)</p>
+              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A; margin-bottom: 8px;">F = (S03A × 0.15) + (S03B × 0.15) + (S04 × 0.40) + (S05 × 0.30)</p>
               <div style="display: flex; gap: 12px; font-size:12px; font-weight:700; flex-wrap: wrap; margin-bottom: 1.5rem;">
                   <span style="background:#10B981; color:white; padding:4px 8px; border-radius:4px;">F ≥ 82: Proceed, top tier</span>
                   <span style="background:#F59E0B; color:white; padding:4px 8px; border-radius:4px;">65 ≤ F &lt; 82: Conditional, human review</span>
@@ -675,18 +663,11 @@
           </div>
         </div>
 
-      </div> <!-- End step-card-grid -->
-    </div> <!-- END FRONTEND TRACK -->
-
-    <!-- ==============================================
-         TRACK 2: BACKEND EXPERT (4-STAGE SPEC)
-         ============================================== -->
-    <div id="track-backend" class="track-content" style="display: none;">
+      </div> </div> <div id="track-backend" class="track-content" style="display: none;">
       <h3 style="margin-top: 0; color: var(--color-brand-dark);">Backend Expert: The Full Lifecycle Pipeline</h3>
       <p>Measurement Target: ACID transaction integrity, ambiguity navigation, connection pool starvation bounds, and thread-blocking detection.</p>
       
       <div class="step-card-grid">
-        <!-- S1 -->
         <div class="step-pane open">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -709,7 +690,7 @@
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
-                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1 = (D1×0.25 + D2×0.15 + D3×0.25 + D4×0.20 + D5×0.10 + D6×0.05) × 10. Max S1 = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 03A Formula (S03A):</span> <span class="kpi-val" style="color:#F1F5F9;">(D1×0.25 + D2×0.15 + D3×0.25 + D4×0.20 + D5×0.10 + D6×0.05) × 10. Max S03A = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1:</span> <span class="kpi-val danger">IF D3 &lt; 7 OR D4 &lt; 7 → DISQUALIFY.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">Total 42 out of 60 or higher. D3 and D4 must each be 7 or above.</span></div>
                 </div>
@@ -717,7 +698,6 @@
           </div>
         </div>
 
-        <!-- S1B -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -738,7 +718,7 @@
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
-                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1B = (D1B×0.30 + D2B×0.25 + D3B×0.25 + D4B×0.20) × 10. Max S1B = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 03B Formula (S03B):</span> <span class="kpi-val" style="color:#F1F5F9;">(D1B×0.30 + D2B×0.25 + D3B×0.25 + D4B×0.20) × 10. Max S03B = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1B:</span> <span class="kpi-val danger">IF D3B &lt; 5 AND D1B &lt; 5 → DISQUALIFY.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">Total 60 out of 100 or higher. D4B must be 5 or above.</span></div>
                 </div>
@@ -746,7 +726,6 @@
           </div>
         </div>
 
-        <!-- S2 -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -847,14 +826,13 @@ public async Task<IActionResult> ProcessBatch(
                 <div class="kpi-grid">
                     <div class="kpi-row"><span class="kpi-label">AI Score (AIS):</span> <span class="kpi-val" style="color:#F1F5F9;">(TTA_Score + MR_Score) / 2. Max AIS = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Base Test Score (BTS):</span> <span class="kpi-val" style="color:#F1F5F9;">((T1+T2+T3+T4+T5) / 5) × 100. Max BTS = 100.</span></div>
-                    <div class="kpi-row"><span class="kpi-label">Stage 04 Formula (S4):</span> <span class="kpi-val" style="color:#34D399;">(BTS × 0.70) + (AIS × 0.30). Max S4 = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 04 Formula (S04):</span> <span class="kpi-val" style="color:#34D399;">(BTS × 0.70) + (AIS × 0.30). Max S04 = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB2:</span> <span class="kpi-val danger">IF T1 = 0 ➔ DISQUALIFY. (Zero tolerance for data loss).</span></div>
                 </div>
             </div>
           </div>
         </div>
 
-        <!-- S3 -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -876,14 +854,13 @@ public async Task<IActionResult> ProcessBatch(
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
-                    <div class="kpi-row"><span class="kpi-label">Score formula (S3):</span> <span class="kpi-val" style="color:#F1F5F9;">((C1×0.30 + C2×0.25 + C3×0.20 + C4×0.15 + C5×0.10) / 5) × 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 05 Formula (S05):</span> <span class="kpi-val" style="color:#F1F5F9;">((C1×0.30 + C2×0.25 + C3×0.20 + C4×0.15 + C5×0.10) / 5) × 100. Max S05 = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB3:</span> <span class="kpi-val danger">IF any of C1, C2, C3, C4 &lt; 3 → DISQUALIFY.</span></div>
                 </div>
             </div>
           </div>
         </div>
 
-        <!-- SCORING MODEL (Collapsed by default) -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -894,7 +871,7 @@ public async Task<IActionResult> ProcessBatch(
           </div>
           <div class="step-pane-body" style="background: var(--color-background-secondary); border-top: none;">
               <h4 style="color: var(--color-brand-dark); margin-top: 0; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid #CBD5E1; padding-bottom:8px; margin-bottom:12px;">Final Composite Score</h4>
-              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A; margin-bottom: 8px;">F = (S1 × 0.15) + (S1B × 0.15) + (S2 × 0.40) + (S3 × 0.30)</p>
+              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A; margin-bottom: 8px;">F = (S03A × 0.15) + (S03B × 0.15) + (S04 × 0.40) + (S05 × 0.30)</p>
               <div style="display: flex; gap: 12px; font-size:12px; font-weight:700; flex-wrap: wrap; margin-bottom: 1.5rem;">
                   <span style="background:#10B981; color:white; padding:4px 8px; border-radius:4px;">F ≥ 82: Proceed, top tier</span>
                   <span style="background:#F59E0B; color:white; padding:4px 8px; border-radius:4px;">65 ≤ F &lt; 82: Conditional, human review</span>
@@ -907,18 +884,11 @@ public async Task<IActionResult> ProcessBatch(
               </ul>
           </div>
         </div>
-      </div> <!-- End step-card-grid -->
-    </div> <!-- END BACKEND TRACK -->
-
-    <!-- ==============================================
-         TRACK 3: FULL-STACK SPECIALIST (4-STAGE SPEC)
-         ============================================== -->
-    <div id="track-fullstack" class="track-content" style="display: none;">
+      </div> </div> <div id="track-fullstack" class="track-content" style="display: none;">
       <h3 style="margin-top: 0; color: var(--color-brand-dark);">Full-Stack Specialist: The Full Lifecycle Pipeline</h3>
       <p>Measurement Target: API caching bounds, distributed idempotency, cross-layer coordination, and optimistic UI rollback fidelity.</p>
       
       <div class="step-card-grid">
-        <!-- S1 -->
         <div class="step-pane open">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -941,14 +911,13 @@ public async Task<IActionResult> ProcessBatch(
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
-                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1 = (D1×0.25 + D2×0.15 + D3×0.25 + D4×0.20 + D5×0.10 + D6×0.05) × 10. Max S1 = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 03A Formula (S03A):</span> <span class="kpi-val" style="color:#F1F5F9;">(D1×0.25 + D2×0.15 + D3×0.25 + D4×0.20 + D5×0.10 + D6×0.05) × 10. Max S03A = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1:</span> <span class="kpi-val danger">IF D3 &lt; 7 OR D1 &lt; 7 → DISQUALIFY.</span></div>
                 </div>
             </div>
           </div>
         </div>
 
-        <!-- S1B -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -966,10 +935,15 @@ public async Task<IActionResult> ProcessBatch(
               <li><strong>D3B — Outcome framing (Wt 0.25):</strong> Quantify business exposure. Revenue & trust problem.</li>
               <li><strong>D4B — AI orchestration strategy (Wt 0.20):</strong> Strong: Use AI to generate hypothesis tree and diagnostic questions.</li>
             </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Stage 03B Formula (S03B):</span> <span class="kpi-val" style="color:#F1F5F9;">(D1B×0.30 + D2B×0.25 + D3B×0.25 + D4B×0.20) × 10. Max S03B = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1B:</span> <span class="kpi-val danger">IF D3B &lt; 5 AND D1B &lt; 5 → DISQUALIFY.</span></div>
+                </div>
+            </div>
           </div>
         </div>
 
-        <!-- S2 -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -987,14 +961,13 @@ public async Task<IActionResult> ProcessBatch(
             <div class="telemetry-suite">
                 <div class="kpi-grid">
                     <div class="kpi-row"><span class="kpi-label">AI Score (AIS):</span> <span class="kpi-val" style="color:#F1F5F9;">TTA_Score + MR_Score. Maximum AIS = 100.</span></div>
-                    <div class="kpi-row"><span class="kpi-label">Stage 2 Formula (S2):</span> <span class="kpi-val" style="color:#34D399;">(BTS × 0.70) + (AIS × 0.30). Max S2 = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 04 Formula (S04):</span> <span class="kpi-val" style="color:#34D399;">(BTS × 0.70) + (AIS × 0.30). Max S04 = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB2:</span> <span class="kpi-val danger">IF T1 = 0 AND T2 = 0 → DISQUALIFY. IF (T1+T2+T3) &lt; 2 → DISQUALIFY.</span></div>
                 </div>
             </div>
           </div>
         </div>
 
-        <!-- S3 -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -1013,10 +986,15 @@ public async Task<IActionResult> ProcessBatch(
                 <li><strong>C4 — Lambda cold starts:</strong> Expected: Provisioned concurrency.</li>
                 <li><strong>C5 — Mongo aggregation cost:</strong> Expected: Compound indexes, Change Streams.</li>
             </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Stage 05 Formula (S05):</span> <span class="kpi-val" style="color:#F1F5F9;">((C1×0.20 + C2×0.20 + C3×0.20 + C4×0.20 + C5×0.20) / 5) × 100. Max S05 = 100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB3:</span> <span class="kpi-val danger">IF any constraint &lt; 3 → DISQUALIFY.</span></div>
+                </div>
+            </div>
           </div>
         </div>
 
-        <!-- SCORING MODEL (Collapsed by default) -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -1027,25 +1005,18 @@ public async Task<IActionResult> ProcessBatch(
           </div>
           <div class="step-pane-body" style="background: var(--color-background-secondary); border-top: none;">
               <h4 style="color: var(--color-brand-dark); margin-top: 0; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid #CBD5E1; padding-bottom:8px; margin-bottom:12px;">Final Composite Score</h4>
-              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A; margin-bottom: 8px;">F = (S1 × 0.15) + (S1B × 0.15) + (S2 × 0.40) + (S3 × 0.30)</p>
+              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A; margin-bottom: 8px;">F = (S03A × 0.15) + (S03B × 0.15) + (S04 × 0.40) + (S05 × 0.30)</p>
               <h4 style="color: var(--color-text-primary); margin-top: 1.5rem; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--color-border-secondary); padding-bottom:8px; margin-bottom:12px;">Predictive Validation</h4>
               <ul class="metric-list">
                   <li><strong>Job Performance Score (JPS) at 90 days:</strong> <span>P1 = manager rating (wt 0.40). <strong>P2 = Cross-layer bug rate</strong> (wt 0.25). P3 = code review pass rate (wt 0.20). P4 = incident involvement inverted (wt 0.15).</span></li>
               </ul>
           </div>
         </div>
-      </div> <!-- End step-card-grid -->
-    </div> <!-- END FULLSTACK TRACK -->
-
-    <!-- ==============================================
-         TRACK 4: DEVOPS & CLOUD (4-STAGE SPEC)
-         ============================================== -->
-    <div id="track-devops" class="track-content" style="display: none;">
+      </div> </div> <div id="track-devops" class="track-content" style="display: none;">
       <h3 style="margin-top: 0; color: var(--color-brand-dark);">DevOps & Cloud: The Full Lifecycle Pipeline</h3>
       <p>Measurement Target: IaC state corruption, ambiguity navigation, zero-trust perimeter enforcement, KMS rotation mechanics, and blast-radius containment.</p>
       
       <div class="step-card-grid">
-        <!-- S1 -->
         <div class="step-pane open">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -1065,13 +1036,13 @@ public async Task<IActionResult> ProcessBatch(
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Stage 03A Formula (S03A):</span> <span class="kpi-val" style="color:#F1F5F9;">(D1×0.25 + D2×0.15 + D3×0.25 + D4×0.20) × 10. Max S03A = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1:</span> <span class="kpi-val danger">IF D1 &lt; 7 OR D3 &lt; 7 → DISQUALIFY. (Non-negotiable IR)</span></div>
                 </div>
             </div>
           </div>
         </div>
 
-        <!-- S1B -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -1087,10 +1058,14 @@ public async Task<IActionResult> ProcessBatch(
               <li><strong>D1B — Problem decomposition (Wt 0.30):</strong> Separate cost vs slow pipeline diagnostic trees.</li>
               <li><strong>D4B — AI orchestration strategy (Wt 0.20):</strong> Prompt AI with two separate requests for checklists.</li>
             </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Stage 03B Formula (S03B):</span> <span class="kpi-val" style="color:#F1F5F9;">(D1B×0.60 + D4B×0.40) × 10. Max S03B = 100.</span></div>
+                </div>
+            </div>
           </div>
         </div>
 
-        <!-- S2 -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -1107,13 +1082,13 @@ public async Task<IActionResult> ProcessBatch(
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Stage 04 Formula (S04):</span> <span class="kpi-val" style="color:#34D399;">(BTS × 0.70) + (AIS × 0.30). Max S04 = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB2:</span> <span class="kpi-val danger">IF T1 CRITICAL &gt; 0 AND T2 = FAIL → DISQUALIFY.</span></div>
                 </div>
             </div>
           </div>
         </div>
 
-        <!-- S3 -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -1129,10 +1104,14 @@ public async Task<IActionResult> ProcessBatch(
                 <li><strong>C2 — Corrupted locked state:</strong> Expected: force-unlock ONLY after confirming dead process. Reconcile drift.</li>
                 <li><strong>C3 — GDPR data residency:</strong> Expected: DR to EU region, bucket replication EU-only.</li>
             </ul>
+            <div class="telemetry-suite">
+                <div class="kpi-grid">
+                    <div class="kpi-row"><span class="kpi-label">Stage 05 Formula (S05):</span> <span class="kpi-val" style="color:#F1F5F9;">((C1×0.33 + C2×0.33 + C3×0.34) / 5) × 100. Max S05 = 100.</span></div>
+                </div>
+            </div>
           </div>
         </div>
 
-        <!-- SCORING MODEL -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -1143,7 +1122,7 @@ public async Task<IActionResult> ProcessBatch(
           </div>
           <div class="step-pane-body" style="background: var(--color-background-secondary); border-top: none;">
               <h4 style="color: var(--color-brand-dark); margin-top: 0; font-size:14px; font-weight:800;">Final Composite Score</h4>
-              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A;">F = (S1 × 0.15) + (S1B × 0.15) + (S2 × 0.40) + (S3 × 0.30)</p>
+              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A;">F = (S03A × 0.15) + (S03B × 0.15) + (S04 × 0.40) + (S05 × 0.30)</p>
               <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom:12px;"><strong>Rationale:</strong> Stage 1 carries elevated importance for DevOps because incident response is not theoretical.</p>
               <h4 style="color: var(--color-text-primary); margin-top: 1.5rem; font-size:14px; font-weight:800;">Predictive Validation</h4>
               <ul class="metric-list">
@@ -1151,15 +1130,11 @@ public async Task<IActionResult> ProcessBatch(
               </ul>
           </div>
         </div>
-      </div> <!-- End step-card-grid -->
-    </div> <!-- END DEVOPS TRACK -->
-
-    <div id="track-data-ai" class="track-content" style="display:none">
+      </div> </div> <div id="track-data-ai" class="track-content" style="display:none">
       <h3 style="margin-top: 0; color: var(--color-brand-dark);">Data & AI: The Full Lifecycle Pipeline</h3>
       <p>Measurement Target: Pipeline resilience, production ML deployment, and the ability to separate data engineering decisions from model decisions. Stack: Python, Scikit-learn, PyTorch, FastAPI, Airflow, MLflow.</p>
       
       <div class="step-card-grid">
-        <!-- Stage 1 -->
         <div class="step-pane open">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -1181,7 +1156,7 @@ public async Task<IActionResult> ProcessBatch(
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
-                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1 = (D1×0.25 + D2×0.15 + D3×0.25 + D4×0.20 + D5×0.10 + D6×0.05) × 10. Max S1 = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 03A Formula (S03A):</span> <span class="kpi-val" style="color:#F1F5F9;">(D1×0.25 + D2×0.15 + D3×0.25 + D4×0.20 + D5×0.10 + D6×0.05) × 10. Max S03A = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1:</span> <span class="kpi-val danger">IF D3 &lt; 7 OR D1 &lt; 7 → DISQUALIFY.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">Total 42 out of 60. D1 and D3 must each be 7 or above.</span></div>
                 </div>
@@ -1189,7 +1164,6 @@ public async Task<IActionResult> ProcessBatch(
           </div>
         </div>
 
-        <!-- Stage 1B -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -1209,7 +1183,7 @@ public async Task<IActionResult> ProcessBatch(
             </ul>
             <div class="telemetry-suite">
                 <div class="kpi-grid">
-                    <div class="kpi-row"><span class="kpi-label">Score formula:</span> <span class="kpi-val" style="color:#F1F5F9;">S1B = (D1B×0.30 + D2B×0.25 + D3B×0.25 + D4B×0.20) × 10. Max S1B = 10.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 03B Formula (S03B):</span> <span class="kpi-val" style="color:#F1F5F9;">(D1B×0.30 + D2B×0.25 + D3B×0.25 + D4B×0.20) × 10. Max S03B = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB1B:</span> <span class="kpi-val danger">IF D3B &lt; 5 AND D1B &lt; 5 → DISQUALIFY.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">Total 60 out of 100. D4B must be 5 or above.</span></div>
                 </div>
@@ -1217,7 +1191,6 @@ public async Task<IActionResult> ProcessBatch(
           </div>
         </div>
 
-        <!-- Stage 2 -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -1240,14 +1213,13 @@ public async Task<IActionResult> ProcessBatch(
                 <div class="kpi-grid">
                     <div class="kpi-row"><span class="kpi-label">Tests:</span> <span class="kpi-val" style="color:#F1F5F9;">T1 — Correct target test: outputs are binary 0/1 labels not feature arrays. T2 — Data leakage test: scaler.fit called only after split. T3 — Pipeline serialization test: both scaler and model present and loadable. T4 — Schema validation test: malformed request returns 422 not 500. T5 — Model versioning test: endpoint loads new artifact after reload interval without restart.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Base Test Score (BTS):</span> <span class="kpi-val" style="color:#F1F5F9;">((T1+T2+T3+T4+T5)/5)×100.</span></div>
-                    <div class="kpi-row"><span class="kpi-label">Stage 2 Formula (S2):</span> <span class="kpi-val" style="color:#34D399;">(BTS×0.70)+(AIS×0.30).</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 04 Formula (S04):</span> <span class="kpi-val" style="color:#34D399;">(BTS × 0.70) + (AIS × 0.30). Max S04 = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB2:</span> <span class="kpi-val danger">IF T1 = 0 → DISQUALIFY immediately. IF (T1+T2+T3) &lt; 2 → DISQUALIFY.</span></div>
                 </div>
             </div>
           </div>
         </div>
 
-        <!-- Stage 3 -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -1269,7 +1241,7 @@ public async Task<IActionResult> ProcessBatch(
             <div class="telemetry-suite">
                 <div class="kpi-grid">
                     <div class="kpi-row"><span class="kpi-label">Evaluation Dimensions:</span> <span class="kpi-val" style="color:#F1F5F9;">L1 — Recovery under pressure (Wt 0.30). L2 — Correctness of solution (Wt 0.25). L3 — Trade-off awareness (Wt 0.25). L4 — Communication clarity (Wt 0.20).</span></div>
-                    <div class="kpi-row"><span class="kpi-label">Score formula (S3):</span> <span class="kpi-val" style="color:#F1F5F9;">((L1×0.30 + L2×0.25 + L3×0.25 + L4×0.20)/5)×100.</span></div>
+                    <div class="kpi-row"><span class="kpi-label">Stage 05 Formula (S05):</span> <span class="kpi-val" style="color:#F1F5F9;">((L1×0.30 + L2×0.25 + L3×0.25 + L4×0.20)/5) × 100. Max S05 = 100.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Circuit Breaker CB3:</span> <span class="kpi-val danger">IF any dimension &lt; 3 → DISQUALIFY.</span></div>
                     <div class="kpi-row"><span class="kpi-label">Pass threshold:</span> <span class="kpi-val warn">No score below 3. Total 16 out of 20.</span></div>
                 </div>
@@ -1277,7 +1249,6 @@ public async Task<IActionResult> ProcessBatch(
           </div>
         </div>
 
-        <!-- Scoring Model -->
         <div class="step-pane">
           <div class="step-pane-header" onclick="toggleStep(this)">
             <div class="step-header-left">
@@ -1288,7 +1259,7 @@ public async Task<IActionResult> ProcessBatch(
           </div>
           <div class="step-pane-body" style="background: var(--color-background-secondary); border-top: none;">
               <h4 style="color: var(--color-brand-dark); margin-top: 0; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid #CBD5E1; padding-bottom:8px; margin-bottom:12px;">Final Composite Score</h4>
-              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A; margin-bottom: 8px;">F = (S1×0.15) + (S1B×0.15) + (S2×0.40) + (S3×0.30).</p>
+              <p style="font-family: var(--font-mono); font-size: 14px; font-weight:bold; color: #1E3A8A; margin-bottom: 8px;">F = (S03A × 0.15) + (S03B × 0.15) + (S04 × 0.40) + (S05 × 0.30)</p>
               <div style="display: flex; gap: 12px; font-size:12px; font-weight:700; flex-wrap: wrap; margin-bottom: 1.5rem;">
                   <span style="background:#10B981; color:white; padding:4px 8px; border-radius:4px;">F ≥ 82: Proceed</span>
                   <span style="background:#F59E0B; color:white; padding:4px 8px; border-radius:4px;">65 ≤ F &lt; 82: Conditional human review</span>
@@ -1299,12 +1270,8 @@ public async Task<IActionResult> ProcessBatch(
           </div>
         </div>
 
-      </div> <!-- End step-card-grid -->
-    </div> <!-- END DATA/AI TRACK -->
+      </div> </div> </section>
 
-  </section>
-
-  <!-- SECTION 5: AI IN THE SYSTEM -->
   <section id="s5-ai">
     <div class="section-tag">05 · AI in the System</div>
     <div class="section-title">Three Angles on AI</div>
@@ -1337,7 +1304,6 @@ public async Task<IActionResult> ProcessBatch(
     <p style="font-size:14px; color:var(--color-text-tertiary); font-style:italic; padding-top:1.5rem;">The system is not designed to catch cheaters. It is designed so that cheating does not produce the signal we are looking for.</p>
   </section>
 
-  <!-- SECTION 6: MATCHING MODEL (RADAR CHART) -->
   <section id="s6">
     <div class="section-tag">06 · Algorithmic Matching</div>
     <div class="section-title">The Vector-Space Matching Model</div>
@@ -1412,13 +1378,11 @@ Result: Cosine Similarity 0.942 -> "Top Decile Alignment"</div>
     </div>
   </section>
 
-  <!-- SECTION 6: SCORING (SLIDERS) -->
   <section id="s7">
     <div class="section-tag">07 · System Math</div>
     <div class="section-title">Scoring Architecture & Circuit Breaker</div>
     <p>To process massive volumes of applicants efficiently, we implement a mathematical Circuit Breaker. If a candidate performs poorly in early stages, and it becomes mathematically impossible to hit the passing threshold, the system ejects them immediately, saving human bandwidth.</p>
 
-    <!-- Interactive Simulator Sandbox -->
     <div class="sim-wrap">
       <div class="sim-head" style="background:var(--color-brand-primary)">Circuit Breaker Simulator (S3, S4, S5)</div>
       <div class="sim-body">
@@ -1461,7 +1425,6 @@ Result: Cosine Similarity 0.942 -> "Top Decile Alignment"</div>
       </div>
     </div>
 
-    <!-- AI Philosophy Tabs below the Simulator -->
     <div class="ai-tabs" style="margin-top: 2rem;">
       <div class="ai-tab active" onclick="switchAITab('candidate', this)">A · AI-Assisted vs Restricted</div>
       <div class="ai-tab" onclick="switchAITab('funnel', this)">B · Funnel instrumentation</div>
@@ -1485,7 +1448,6 @@ Result: Cosine Similarity 0.942 -> "Top Decile Alignment"</div>
     </div>
   </section>
 
-  <!-- SECTION 7 -->
   <section id="s8">
     <div class="section-tag">08 · Measurement & Predictive Validity</div>
     <div class="section-title">How We Know the Funnel Is Working</div>
@@ -1546,7 +1508,6 @@ Result: Cosine Similarity 0.942 -> "Top Decile Alignment"</div>
     </div>
   </section>
 
-  <!-- SECTION 8 -->
   <section id="s9">
     <div class="section-tag">09 · Scaling Architecture</div>
     <div class="section-title">Scalability, Calibration & Operations</div>
@@ -1563,14 +1524,12 @@ Result: Cosine Similarity 0.942 -> "Top Decile Alignment"</div>
       </div>
     </div>
 
-    <!-- Human Calibration Optimization Block -->
     <div style="background: var(--color-background-info); border-left: 4px solid var(--color-brand-primary); padding: 1.25rem 1.5rem; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; margin-top: 1.5rem;">
       <h4 style="font-size: 15px; font-weight: 800; color: var(--color-brand-dark); margin-top: 0; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Interviewer Calibration Engine</h4>
       <p style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 0;">With a pool of 100+ senior evaluators, scaling human steps risks rating drift. We mandate that 5% of Stage 5 Live Defenses are dual-graded (shadowed). If any interviewer's ratings deviate by more than +/-12% from the track cohort mean, the system triggers an automatic alignment flag and routes both graders to a calibration workshop.</p>
     </div>
   </section>
 
-  <!-- SECTION 9: TRADEOFFS -->
   <section id="s-tradeoffs">
     <div class="section-tag">10 · Honest Assessment</div>
     <div class="section-title">Where This System Can Fail</div>
